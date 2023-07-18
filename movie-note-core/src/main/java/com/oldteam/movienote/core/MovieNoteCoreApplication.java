@@ -1,13 +1,13 @@
-package com.oldteam.movienote;
+package com.oldteam.movienote.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MovieNoteApiApplication {
+public class MovieNoteCoreApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MovieNoteApiApplication.class, args);
+        SpringApplication.run(MovieNoteCoreApplication.class, args);
     }
 
 }
