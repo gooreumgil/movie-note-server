@@ -20,4 +20,12 @@ public class Member extends AuditingDomain {
     private String email;
     private String password;
 
+    public static Member create(String name, String email, String password) {
+        Member member = new Member();
+        member.name = name;
+        member.email = email;
+        member.password = password;
+        return member;
+    }
+
 }

@@ -10,4 +10,5 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.oldteam.movienote.core.domain"})
 @EnableJpaRepositories(basePackages = {"com.oldteam.movienote.core.domain"})
 public class CoreJpaConfig {
+
 }

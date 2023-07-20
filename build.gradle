@@ -71,7 +71,8 @@ configure(webProjects) {
 }
 
 def jpaProjects = [
-		project(":movie-note-core")
+		project(":movie-note-core"),
+		project(":movie-note-api")
 ]
 
 configure(jpaProjects) {
