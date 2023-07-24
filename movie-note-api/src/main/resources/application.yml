@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    group:
+      local:
+        - db-local
+      dev:
+        - db-dev
+      prod:
+        - -db-prod
+    active: local
+    include: core, core-db
