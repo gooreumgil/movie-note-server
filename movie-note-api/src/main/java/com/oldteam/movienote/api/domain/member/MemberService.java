@@ -26,6 +26,10 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
     @Transactional(readOnly = true)
     public List<Member> findAll() {
         return memberRepository.findAll();

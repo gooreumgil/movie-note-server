@@ -19,9 +19,9 @@ public class AuditingDomain {
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDateTime;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedDateTime;
 
 }

@@ -25,4 +25,10 @@ public class Movie extends AuditingDomain {
     private List<MovieReview> movieReviewList = new ArrayList<>();
 
 
+    public static Movie create(String code, String imageUrl) {
+        Movie movie = new Movie();
+        movie.code = code;
+        movie.imageUrl = imageUrl;
+        return movie;
+    }
 }
