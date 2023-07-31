@@ -13,6 +13,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -30,7 +31,10 @@ public class MemberService {
         return memberRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    @Transactional(readOnly = true)
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+    }
+
     public List<Member> findAll() {
         return memberRepository.findAll();
     }
