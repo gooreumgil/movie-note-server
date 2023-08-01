@@ -18,10 +18,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class MovieNoteApiSecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration) throws Exception {
+
         http
                 .authorizeHttpRequests(authorize ->
                         authorize
@@ -33,14 +33,15 @@ public class MovieNoteApiSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);
 
         http
-                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtUtil))
+                .authenticationManager(authenticationManager(authenticationConfiguration))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtUtil))
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

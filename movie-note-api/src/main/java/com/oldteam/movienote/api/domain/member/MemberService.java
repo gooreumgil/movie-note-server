@@ -1,6 +1,7 @@
 package com.oldteam.movienote.api.domain.member;
 
 import com.oldteam.movienote.api.domain.member.dto.MemberSaveReqDto;
+import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,20 @@ public class MemberService {
 
     @Transactional
     public Member save(MemberSaveReqDto saveReqDto) {
+
         String name = saveReqDto.getName();
         String email = saveReqDto.getEmail();
+        String encryptEmail;
+
+        try {
+            encryptEmail = AES256Util.encrypt(email);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         String password = saveReqDto.getPassword();
-        Member member = Member.create(name, email, password);
+        Member member = Member.create(name, encryptEmail, password);
+
         return memberRepository.save(member);
     }
 
@@ -32,7 +43,16 @@ public class MemberService {
     }
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+
+        String encryptEmail;
+
+        try {
+            encryptEmail = AES256Util.encrypt(email);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return memberRepository.findByEmail(encryptEmail).orElseThrow(RuntimeException::new);
     }
 
     public List<Member> findAll() {
