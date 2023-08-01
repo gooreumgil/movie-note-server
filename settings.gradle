@@ -2,3 +2,4 @@ rootProject.name = 'movie-note'
 
 include 'movie-note-api'
 include 'movie-note-core'
+include 'movie-note-common'
