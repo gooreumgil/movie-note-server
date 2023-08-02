@@ -1,4 +1,4 @@
-package com.oldteam.movienote.api.domain.member.dto;
+package com.oldteam.movienote.api.domain.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberSaveReqDto {
+public class AuthSignUpReqDto {
 
     private String name;
     private String email;

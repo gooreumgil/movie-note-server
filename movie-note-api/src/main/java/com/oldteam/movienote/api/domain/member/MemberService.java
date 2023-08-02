@@ -1,11 +1,12 @@
 package com.oldteam.movienote.api.domain.member;
 
-import com.oldteam.movienote.api.domain.member.dto.MemberSaveReqDto;
+import com.oldteam.movienote.api.domain.auth.dto.AuthSignUpReqDto;
 import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,10 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public Member save(MemberSaveReqDto saveReqDto) {
+    public Member save(AuthSignUpReqDto saveReqDto) {
 
         String name = saveReqDto.getName();
         String email = saveReqDto.getEmail();
@@ -33,7 +35,8 @@ public class MemberService {
         }
 
         String password = saveReqDto.getPassword();
-        Member member = Member.create(name, encryptEmail, password);
+        String encodedPassword = passwordEncoder.encode(password);
+        Member member = Member.create(name, encryptEmail, encodedPassword);
 
         return memberRepository.save(member);
     }

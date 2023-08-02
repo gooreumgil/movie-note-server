@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +19,9 @@ public class Member extends AuditingDomain {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String nickname;
     private String email;
+    private String imageUrl;
     private String password;
 
     public static Member create(String name, String email, String password) {
