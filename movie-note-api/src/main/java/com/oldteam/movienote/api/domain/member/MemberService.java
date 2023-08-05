@@ -3,6 +3,7 @@ package com.oldteam.movienote.api.domain.member;
 import com.oldteam.movienote.api.domain.auth.dto.AuthSignUpReqDto;
 import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
+import com.oldteam.movienote.core.domain.member.MemberRole;
 import com.oldteam.movienote.core.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class MemberService {
     public Member save(AuthSignUpReqDto saveReqDto) {
 
         String name = saveReqDto.getName();
+        String nickname = saveReqDto.getNickname();
         String email = saveReqDto.getEmail();
         String encryptEmail;
 
@@ -36,7 +38,7 @@ public class MemberService {
 
         String password = saveReqDto.getPassword();
         String encodedPassword = passwordEncoder.encode(password);
-        Member member = Member.create(name, encryptEmail, encodedPassword);
+        Member member = Member.create(name, nickname, encryptEmail, encodedPassword, MemberRole.MEMBER);
 
         return memberRepository.save(member);
     }

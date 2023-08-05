@@ -20,14 +20,19 @@ public class Member extends AuditingDomain {
     private Long id;
     private String name;
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
     private String email;
     private String imageUrl;
     private String password;
 
-    public static Member create(String name, String email, String password) {
+    public static Member create(String name, String nickname, String email, String password, MemberRole memberRole) {
         Member member = new Member();
         member.name = name;
+        member.nickname = nickname;
         member.email = email;
+        member.memberRole = memberRole;
         member.password = password;
         return member;
     }

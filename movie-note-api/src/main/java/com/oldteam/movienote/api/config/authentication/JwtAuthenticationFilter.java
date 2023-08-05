@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        Authentication authentication = null;
+        Authentication authentication;
 
         try {
             authentication = getAuthentication(request);
@@ -73,10 +74,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         roles.add(new SimpleGrantedAuthority("ROLE_" + role));
 
         MemberTokenMapper memberTokenMapper = new MemberTokenMapper(claims);
-
-        if (memberTokenMapper == null) {
-            return null;
-        }
 
         return new UsernamePasswordAuthenticationToken(memberTokenMapper, null, roles);
 
