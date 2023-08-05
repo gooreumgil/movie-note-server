@@ -28,7 +28,8 @@ public class JwtUtil {
         JwtBuilder builder = Jwts.builder()
                 .claim("id", member.getId())
                 .claim("email", AES256Util.decrypt(member.getEmail()))
-                .claim("name", member.getName());
+                .claim("name", member.getName())
+                .claim("role", member.getMemberRole().name());
 
         return builder
                 .signWith(key, SignatureAlgorithm.HS256)
