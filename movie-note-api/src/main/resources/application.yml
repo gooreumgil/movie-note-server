@@ -8,4 +8,4 @@ spring:
       prod:
         - -db-prod
     active: local
-    include: core, core-db
+    include: core, core-db, aws

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ public class AuthSignUpReqDto {
 
     private String name;
     private String nickname;
+    private MultipartFile profileImage;
     private String email;
     private String password;
 

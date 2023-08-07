@@ -1,6 +1,7 @@
 dependencies {
     implementation project(":movie-note-core")
     implementation project(":movie-note-common")
+    implementation project(":movie-note-clients:aws-resource")
 }
 
 tasks.named('test') {

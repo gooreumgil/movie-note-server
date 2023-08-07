@@ -37,4 +37,8 @@ public class Member extends AuditingDomain {
         return member;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 }

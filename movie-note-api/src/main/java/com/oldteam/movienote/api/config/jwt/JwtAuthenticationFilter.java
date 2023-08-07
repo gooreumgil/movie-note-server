@@ -1,4 +1,4 @@
-package com.oldteam.movienote.api.config.authentication;
+package com.oldteam.movienote.api.config.jwt;
 
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.utils.JwtUtil;

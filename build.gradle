@@ -13,7 +13,8 @@ plugins {
 def javaProjects = [
 		project(":movie-note-api"),
 		project(":movie-note-core"),
-		project(":movie-note-common")
+		project(":movie-note-common"),
+		project(":movie-note-clients:aws-resource")
 ]
 
 configure(javaProjects) {

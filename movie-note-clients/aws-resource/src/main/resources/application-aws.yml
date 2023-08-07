@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAZSJOIUZLGT3OON7W
+      secret-key: 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
+    s3:
+      bucket-name: movie-note
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
