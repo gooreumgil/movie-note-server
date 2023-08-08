@@ -6,6 +6,6 @@ spring:
       dev:
         - db-dev
       prod:
-        - -db-prod
+        - db-prod
     active: local
     include: core, core-db, aws
