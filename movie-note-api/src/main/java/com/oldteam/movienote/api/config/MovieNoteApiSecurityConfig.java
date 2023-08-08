@@ -10,6 +10,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,13 +35,16 @@ public class MovieNoteApiSecurityConfig {
                         authorize
                                 .requestMatchers(
                                         "/api/v1/auth/login",
-                                        "/api/v1/auth/sign-up"
+                                        "/api/v1/auth/sign-up",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**"
                                 ).permitAll()
                                 .requestMatchers("/**").hasRole("MEMBER")
                 );
 
         http
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable);
 
         http
                 .authenticationManager(authenticationManager(authenticationConfiguration))
@@ -49,6 +53,11 @@ public class MovieNoteApiSecurityConfig {
 
         return http.build();
     }
+
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers("/swagger-ui/**");
+//    }
 
     @Bean
     public RoleHierarchy roleHierarchy() {
@@ -74,7 +83,7 @@ public class MovieNoteApiSecurityConfig {
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/v1/**", corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }
 
