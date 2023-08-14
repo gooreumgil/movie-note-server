@@ -7,9 +7,13 @@ import com.oldteam.movienote.api.utils.JwtUtil;
 import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +31,7 @@ public class AuthController {
     private static final String TOKEN_PREFIX_CONTAINS_SPACE = "Bearer ";
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> signUp(@RequestBody AuthSignUpReqDto dto) {
+    public ResponseEntity<Void> signUp(@ParameterObject @ModelAttribute AuthSignUpReqDto dto) {
         authService.signUp(dto);
         return ResponseEntity.ok().build();
     }
