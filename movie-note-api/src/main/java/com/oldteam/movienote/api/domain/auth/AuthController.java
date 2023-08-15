@@ -31,7 +31,7 @@ public class AuthController {
     private static final String TOKEN_PREFIX_CONTAINS_SPACE = "Bearer ";
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> signUp(@ParameterObject @ModelAttribute AuthSignUpReqDto dto) {
+    public ResponseEntity<Void> signUp(@RequestBody AuthSignUpReqDto dto) {
         authService.signUp(dto);
         return ResponseEntity.ok().build();
     }
