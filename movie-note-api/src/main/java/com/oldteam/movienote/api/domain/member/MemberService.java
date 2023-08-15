@@ -45,6 +45,11 @@ public class MemberService {
             throw new RuntimeException(e);
         }
 
+        Optional<Member> optionalMember = memberRepository.findByEmail(encryptEmail);
+        if (optionalMember.isPresent()) {
+            throw new RuntimeException("존재하는 이메일입니다.");
+        }
+
         String password = saveReqDto.getPassword();
         String encodedPassword = passwordEncoder.encode(password);
         Member member = Member.create(name, nickname, encryptEmail, encodedPassword, MemberRole.MEMBER);
