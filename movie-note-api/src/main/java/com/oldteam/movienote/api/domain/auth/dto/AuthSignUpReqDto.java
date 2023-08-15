@@ -14,7 +14,7 @@ public class AuthSignUpReqDto {
 
     private String name;
     private String nickname;
-    private MultipartFile profileImage;
+    private Long uploadFileId;
     private String email;
     private String password;
 

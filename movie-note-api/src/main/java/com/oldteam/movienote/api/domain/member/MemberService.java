@@ -1,11 +1,13 @@
 package com.oldteam.movienote.api.domain.member;
 
 import com.oldteam.movienote.api.domain.auth.dto.AuthSignUpReqDto;
+import com.oldteam.movienote.api.domain.uploadfile.UploadFileService;
 import com.oldteam.movienote.clients.awsresource.service.AwsS3Service;
 import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.member.MemberRole;
 import com.oldteam.movienote.core.domain.member.repository.MemberRepository;
+import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,8 +25,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final AwsS3Service awsS3Service;
-
+    private final UploadFileService uploadFileService;
     private final PasswordEncoder passwordEncoder;
 
     private static final String MEMBER_DIRECTORY = "members";
@@ -49,13 +51,17 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(member);
 
-        MultipartFile profileImage = saveReqDto.getProfileImage();
-        try {
-            String imageUrl = awsS3Service.saveFile(profileImage, MEMBER_DIRECTORY + "/" + savedMember.getId() + "/" + MEMBER_PROFILE_IMAGE_DIRECTORY);
-            savedMember.setImageUrl(imageUrl);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Long uploadFileId = saveReqDto.getUploadFileId();
+        if (uploadFileId != null) {
+            Optional<UploadFile> optionalUploadFile = uploadFileService.findById(uploadFileId);
+            optionalUploadFile.ifPresent(savedMember::setUploadFile);
         }
+//        try {
+//            String imageUrl = awsS3Service.saveFile(profileImage, MEMBER_DIRECTORY + "/" + savedMember.getId() + "/" + MEMBER_PROFILE_IMAGE_DIRECTORY);
+//            savedMember.setImageUrl(imageUrl);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
         return savedMember;
 

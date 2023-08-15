@@ -1,6 +1,7 @@
 package com.oldteam.movienote.core.domain.member;
 
 import com.oldteam.movienote.core.audit.AuditingDomain;
+import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,13 @@ public class Member extends AuditingDomain {
     private String name;
     private String nickname;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "upload_file_id")
+    private UploadFile uploadFile;
+
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
     private String email;
-    private String imageUrl;
     private String password;
 
     public static Member create(String name, String nickname, String email, String password, MemberRole memberRole) {
@@ -37,8 +41,8 @@ public class Member extends AuditingDomain {
         return member;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setUploadFile(UploadFile uploadFile) {
+        this.uploadFile = uploadFile;
     }
 
 }

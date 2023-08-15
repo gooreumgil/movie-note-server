@@ -2,6 +2,7 @@ package com.oldteam.movienote.clients.awsresource.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.oldteam.movienote.clients.awsresource.dto.AwsFileInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class AwsS3Service {
     }
 
     // Controller 단에서 입력받은 파일을 저장
-    public String saveFile(MultipartFile file, String directoryName) throws Exception {
+    public AwsFileInfo saveFile(MultipartFile file, String directoryName) throws Exception {
 
         if (file == null || file.isEmpty()) {
             throw new RuntimeException("uploadFile 실패");
@@ -42,7 +43,9 @@ public class AwsS3Service {
         om.setContentType(file.getContentType());
 
         s3Client.putObject(BUCKET_NAME, s3FileKey, file.getInputStream(), om);
-        return s3Client.getUrl(BUCKET_NAME, s3FileKey).toString();
+        String s3Url = s3Client.getUrl(BUCKET_NAME, s3FileKey).toString();
+        return AwsFileInfo.of(s3FileKey, newFileName, s3Url);
+
     }
 
     public String getS3FileKey(String prefix, String fileName) {

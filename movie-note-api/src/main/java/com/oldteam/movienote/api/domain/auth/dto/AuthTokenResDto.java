@@ -23,7 +23,6 @@ public class AuthTokenResDto {
         authTokenResDto.id = member.getId();
         authTokenResDto.nickname = member.getNickname();
         authTokenResDto.email = decryptedEmail;
-        authTokenResDto.imageUrl = member.getImageUrl();
         authTokenResDto.accessToken = accessToken;
         return authTokenResDto;
     }
@@ -33,7 +32,6 @@ public class AuthTokenResDto {
         authTokenResDto.id = member.getId();
         authTokenResDto.nickname = member.getNickname();
         authTokenResDto.email = decryptedEmail;
-        authTokenResDto.imageUrl = member.getImageUrl();
         return authTokenResDto;
     }
 
