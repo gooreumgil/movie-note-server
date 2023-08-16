@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,5 +30,9 @@ public class MovieReview extends AuditingDomain {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
+    private List<MovieReviewUploadFileRelation> fileList = new ArrayList<>();
+
 
 }
