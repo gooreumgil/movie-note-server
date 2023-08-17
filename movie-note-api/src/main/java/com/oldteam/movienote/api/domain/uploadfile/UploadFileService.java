@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -24,6 +25,10 @@ public class UploadFileService {
 
     public Optional<UploadFile> findById(Long id) {
         return uploadFileRepository.findById(id);
+    }
+
+    public List<UploadFile> findByIds(List<Long> ids) {
+        return uploadFileRepository.findByIdIn(ids);
     }
 
     @Transactional

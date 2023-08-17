@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -34,5 +33,24 @@ public class MovieReview extends AuditingDomain {
     @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
     private List<MovieReviewUploadFileRelation> fileList = new ArrayList<>();
 
+    public static MovieReview create(String title, String content) {
+        MovieReview movieReview = new MovieReview();
+        movieReview.title = title;
+        movieReview.content = content;
+        return movieReview;
+    }
 
+
+    public void setMovie(Movie movie) {
+        this.movie = movie;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public void addFile(MovieReviewUploadFileRelation movieReviewUploadFileRelation) {
+        this.fileList.add(movieReviewUploadFileRelation);
+        movieReviewUploadFileRelation.setMovieReview(this);
+    }
 }

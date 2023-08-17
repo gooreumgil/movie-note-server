@@ -32,4 +32,9 @@ public class Movie extends AuditingDomain {
         movie.imageUrl = imageUrl;
         return movie;
     }
+
+    public void addMovieReview(MovieReview movieReview) {
+        this.movieReviewList.add(movieReview);
+        movieReview.setMovie(this);
+    }
 }

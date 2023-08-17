@@ -24,4 +24,11 @@ public class MovieReviewUploadFileRelation {
     @JoinColumn(name = "upload_file_id")
     private UploadFile uploadFile;
 
+    public void setMovieReview(MovieReview movieReview) {
+        this.movieReview = movieReview;
+    }
+
+    public void setUploadFile(UploadFile uploadFile) {
+        this.uploadFile = uploadFile;
+    }
 }
