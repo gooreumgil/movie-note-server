@@ -30,12 +30,12 @@ public class MovieController {
     }
 
     @PostMapping("/{id}/movie-reviews")
-    public void saveMovieReview(
+    public void addMovieReview(
             @PathVariable Long id,
             @RequestBody MovieReviewSaveReqDto dto,
             @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
-
+        movieService.addMovieReview(id, tokenMapper.getId(), dto);
 
     }
 

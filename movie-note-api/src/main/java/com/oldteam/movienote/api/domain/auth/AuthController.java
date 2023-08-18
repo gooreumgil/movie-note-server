@@ -44,7 +44,7 @@ public class AuthController {
         return ResponseEntity.ok(AuthTokenResDto.of(member, decryptedEmail, accessToken));
     }
 
-    @PostMapping("/verification")
+    @GetMapping("/verification")
     public ResponseEntity<AuthTokenResDto> verify(HttpServletRequest request) {
 
         String authorization = request.getHeader(AUTHORIZATION);
