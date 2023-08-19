@@ -37,11 +37,10 @@ public class MovieNoteApiSecurityConfig {
                                 .requestMatchers(
                                         "/api/v1/auth/login",
                                         "/api/v1/auth/sign-up",
+                                        "/api/v1/movie-reviews",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/movie-reviews")
-                                .permitAll()
                                 .requestMatchers("/**").hasRole("MEMBER")
                 );
 
