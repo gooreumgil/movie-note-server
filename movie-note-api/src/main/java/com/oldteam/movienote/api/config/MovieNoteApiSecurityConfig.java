@@ -5,6 +5,7 @@ import com.oldteam.movienote.api.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,6 +40,8 @@ public class MovieNoteApiSecurityConfig {
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/movie-reviews")
+                                .permitAll()
                                 .requestMatchers("/**").hasRole("MEMBER")
                 );
 
