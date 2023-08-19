@@ -21,22 +21,12 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public Movie findOne(@PathVariable Long id) {
-        return movieService.findById(id);
+        return movieService.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @PostMapping
     public Movie save(@RequestBody MovieSaveReqDto dto) {
         return movieService.save(dto);
-    }
-
-    @PostMapping("/{id}/movie-reviews")
-    public void addMovieReview(
-            @PathVariable Long id,
-            @RequestBody MovieReviewSaveReqDto dto,
-            @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
-
-        movieService.addMovieReview(id, tokenMapper.getId(), dto);
-
     }
 
 

@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieReviewSaveReqDto {
 
+    private Long movieId;
     private String title;
     private String content;
     private List<Long> uploadFileIds = new ArrayList<>();

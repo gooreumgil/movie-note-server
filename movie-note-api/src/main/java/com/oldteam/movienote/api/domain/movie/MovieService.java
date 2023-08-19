@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,14 +39,14 @@ public class MovieService {
     }
 
     @Transactional(readOnly = true)
-    public Movie findById(Long id) {
-        return movieRepository.findById(id).orElseThrow(RuntimeException::new);
+    public Optional<Movie> findById(Long id) {
+        return movieRepository.findById(id);
     }
 
     @Transactional
     public void addMovieReview(Long id, Long memberId, MovieReviewSaveReqDto dto) {
 
-        Movie movie = findById(id);
+        Optional<Movie> optionalMovie = findById(id);
         Member member = memberService.findById(memberId);
         List<Long> uploadFileIds = dto.getUploadFileIds();
         MovieReview movieReview = MovieReview.create(dto.getTitle(), dto.getContent());
@@ -59,7 +60,7 @@ public class MovieService {
             }
         }
 
-        movie.addMovieReview(movieReview);
+        optionalMovie.ifPresent(movie -> movie.addMovieReview(movieReview));
         member.addMovieReview(movieReview);
 
     }
