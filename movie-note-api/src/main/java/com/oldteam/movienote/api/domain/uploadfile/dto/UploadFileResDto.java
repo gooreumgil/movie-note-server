@@ -1,5 +1,6 @@
 package com.oldteam.movienote.api.domain.uploadfile.dto;
 
+import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFileType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,4 +20,10 @@ public class UploadFileResDto {
     private String url;
     private String type;
 
+    public UploadFileResDto(UploadFile uploadFile) {
+        this.id = uploadFile.getId();
+        this.s3Key = uploadFile.getS3Key();
+        this.url = uploadFile.getUrl();
+        this.type = uploadFile.getType().name();
+    }
 }

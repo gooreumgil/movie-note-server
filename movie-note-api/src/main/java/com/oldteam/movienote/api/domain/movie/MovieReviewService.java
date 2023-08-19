@@ -35,7 +35,7 @@ public class MovieReviewService {
     }
 
     @Transactional
-    public void save(MovieReviewSaveReqDto dto, Long memberId) {
+    public MovieReview save(MovieReviewSaveReqDto dto, Long memberId) {
 
         Long movieId = dto.getMovieId();
         Member member = memberService.findById(memberId);
@@ -60,7 +60,24 @@ public class MovieReviewService {
 
         member.addMovieReview(movieReview);
 
+        return movieReview;
+
     }
 
+    @Transactional
+    public void deleteById(Long id, Long memberId) {
+        Optional<MovieReview> optionalMovieReview = movieReviewRepository.findById(id);
+        if (optionalMovieReview.isEmpty()) {
+            throw new RuntimeException("존재하지 않아");
+        }
 
+        MovieReview movieReview = optionalMovieReview.get();
+        Member member = movieReview.getMember();
+        if (!memberId.equals(member.getId())) {
+            throw new RuntimeException("작성자만 지울 수 있어");
+        }
+
+        movieReviewRepository.delete(movieReview);
+
+    }
 }

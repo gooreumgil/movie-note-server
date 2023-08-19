@@ -35,21 +35,13 @@ public class MovieReviewController {
         Page<MovieReview> movieReviewPage = movieReviewService.findAll(pageable);
         List<MovieReviewResDto> movieReviewResDtos = movieReviewPage.map(movieReview -> {
 
-            MovieReviewResDto movieReviewResDto = new MovieReviewResDto();
-            movieReviewResDto.setId(movieReview.getId());
-            movieReviewResDto.setTitle(movieReviewResDto.getTitle());
-            movieReviewResDto.setContent(movieReviewResDto.getContent());
-
+            MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
             List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
 
             for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
                 UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
                 if (uploadFile != null) {
-                    UploadFileResDto uploadFileResDto = new UploadFileResDto();
-                    uploadFileResDto.setId(uploadFile.getId());
-                    uploadFileResDto.setUrl(uploadFile.getUrl());
-                    uploadFileResDto.setS3Key(uploadFile.getS3Key());
-                    uploadFileResDto.setType(uploadFile.getType().name());
+                    UploadFileResDto uploadFileResDto = new UploadFileResDto(uploadFile);
                     movieReviewResDto.addUploadFile(uploadFileResDto);
                 }
             }
@@ -63,9 +55,31 @@ public class MovieReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody MovieReviewSaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
-        movieReviewService.save(dto, tokenMapper.getId());
+    public ResponseEntity<MovieReviewResDto> save(@RequestBody MovieReviewSaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+
+        MovieReview movieReview = movieReviewService.save(dto, tokenMapper.getId());
+
+        MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
+        List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
+
+        for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
+
+            UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
+            if (uploadFile != null) {
+                UploadFileResDto uploadFileResDto = new UploadFileResDto(uploadFile);
+                movieReviewResDto.addUploadFile(uploadFileResDto);
+            }
+
+        }
+
+        return ResponseEntity.ok(movieReviewResDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        movieReviewService.deleteById(id, tokenMapper.getId());
         return ResponseEntity.ok().build();
+
     }
 
 

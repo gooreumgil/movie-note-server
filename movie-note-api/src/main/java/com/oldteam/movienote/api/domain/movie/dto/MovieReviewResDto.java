@@ -1,6 +1,7 @@
 package com.oldteam.movienote.api.domain.movie.dto;
 
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
+import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,12 @@ public class MovieReviewResDto {
     private String title;
     private String content;
     private List<UploadFileResDto> uploadFileList = new ArrayList<>();
+
+    public MovieReviewResDto(MovieReview movieReview) {
+        this.id = movieReview.getId();
+        this.title = movieReview.getTitle();
+        this.content = movieReview.getContent();
+    }
 
     public void addUploadFile(UploadFileResDto uploadFileResDto) {
         this.uploadFileList.add(uploadFileResDto);
