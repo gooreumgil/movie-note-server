@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +22,15 @@ public class MovieReviewResDto {
     private String title;
     private String content;
     private List<UploadFileResDto> uploadFileList = new ArrayList<>();
+    private LocalDateTime createdDateTime;
+    private LocalDateTime updatedDateTime;
 
     public MovieReviewResDto(MovieReview movieReview) {
         this.id = movieReview.getId();
         this.title = movieReview.getTitle();
         this.content = movieReview.getContent();
+        this.createdDateTime = movieReview.getCreatedDateTime();
+        this.updatedDateTime = movieReview.getUpdatedDateTime();
     }
 
     public void addUploadFile(UploadFileResDto uploadFileResDto) {

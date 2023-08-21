@@ -10,6 +10,8 @@ import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,7 +32,7 @@ public class MovieReviewController {
 
     @GetMapping
     public ResponseEntity<PageDto.ListResponse<MovieReviewResDto>> findAll(
-            @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+            @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAll(pageable);
         List<MovieReviewResDto> movieReviewResDtos = movieReviewPage.map(movieReview -> {

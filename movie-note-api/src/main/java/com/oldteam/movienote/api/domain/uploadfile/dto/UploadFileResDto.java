@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,11 +21,18 @@ public class UploadFileResDto {
     private String s3Key;
     private String url;
     private String type;
+    private LocalDateTime createdDateTime;
+    private LocalDateTime updatedDateTime;
 
     public UploadFileResDto(UploadFile uploadFile) {
         this.id = uploadFile.getId();
         this.s3Key = uploadFile.getS3Key();
         this.url = uploadFile.getUrl();
-        this.type = uploadFile.getType().name();
+        UploadFileType uploadFileType = uploadFile.getType();
+        if (uploadFileType != null) {
+            this.type = uploadFileType.name();
+        }
+        this.createdDateTime = uploadFile.getCreatedDateTime();
+        this.updatedDateTime = uploadFile.getUpdatedDateTime();
     }
 }
