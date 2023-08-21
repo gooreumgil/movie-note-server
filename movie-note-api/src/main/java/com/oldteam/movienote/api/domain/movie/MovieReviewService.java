@@ -32,7 +32,7 @@ public class MovieReviewService {
     private final UploadFileService uploadFileService;
 
     public Page<MovieReview> findAll(Pageable pageable) {
-        return movieReviewRepository.findAll(pageable);
+        return movieReviewRepository.findAllJoinedMember(pageable);
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.oldteam.movienote.api.domain.movie.dto;
 
+import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
@@ -24,6 +25,8 @@ public class MovieReviewResDto {
     private List<UploadFileResDto> uploadFileList = new ArrayList<>();
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
+
+    private MemberResDto memberResDto;
 
     public MovieReviewResDto(MovieReview movieReview) {
         this.id = movieReview.getId();
