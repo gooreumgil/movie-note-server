@@ -32,6 +32,22 @@ public class MovieReviewController {
 
     private final MovieReviewService movieReviewService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MovieReviewResDto> findOne(@PathVariable Long id) {
+        MovieReview movieReview = movieReviewService.findById(id).orElseThrow(RuntimeException::new);
+        MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
+        Member member = movieReview.getMember();
+        if (member != null) {
+            MemberResDto memberResDto = new MemberResDto(member);
+            UploadFile uploadFile = member.getUploadFile();
+            if (uploadFile != null) {
+                memberResDto.setProfileImageUrl(uploadFile.getUrl());
+            }
+            movieReviewResDto.setMemberResDto(memberResDto);
+        }
+        return ResponseEntity.ok(movieReviewResDto);
+    }
+
     @GetMapping
     public ResponseEntity<PageDto.ListResponse<MovieReviewResDto>> findAll(
             @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {

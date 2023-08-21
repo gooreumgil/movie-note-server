@@ -16,7 +16,7 @@ public class MovieNoteApiSwaggerConfig {
         String[] paths = {"/api/v1/**"};
 
         return GroupedOpenApi.builder()
-                .group("movieNotApi")
+                .group("movieNoteApi")
                 .pathsToMatch(paths)
                 .build();
     }

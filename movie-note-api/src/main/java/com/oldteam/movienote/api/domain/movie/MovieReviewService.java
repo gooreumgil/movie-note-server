@@ -81,4 +81,8 @@ public class MovieReviewService {
         movieReviewRepository.delete(movieReview);
 
     }
+
+    public Optional<MovieReview> findById(Long id) {
+        return movieReviewRepository.findByIdJoinedMember(id);
+    }
 }
