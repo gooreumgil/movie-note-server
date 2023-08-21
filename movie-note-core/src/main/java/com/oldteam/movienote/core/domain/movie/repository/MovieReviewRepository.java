@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface MovieReviewRepository extends JpaRepository<MovieReview, Long> {
 
-    @Query("select movieReview from MovieReview movieReview join fetch movieReview.member mem join fetch mem.uploadFile")
+    @Query("select movieReview from MovieReview movieReview join fetch movieReview.member mem left join fetch mem.uploadFile")
     Page<MovieReview> findAllJoinedMember(Pageable pageable);
 
 }
