@@ -59,7 +59,30 @@ public class MovieReviewController {
     @PatchMapping("/{id}")
     public ResponseEntity<MovieReviewResDto> update(@PathVariable Long id, @RequestBody MovieReviewUpdateReqDto dto) {
 
-        return null;
+        MovieReview movieReview = movieReviewService.update(id, dto);
+        MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
+
+        Member member = movieReview.getMember();
+        MemberResDto memberResDto = new MemberResDto(member);
+
+        UploadFile profileImage = member.getUploadFile();
+        if (profileImage != null) {
+            memberResDto.setProfileImageUrl(profileImage.getUrl());
+        }
+
+        movieReviewResDto.setMemberResDto(memberResDto);
+
+        List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
+
+        for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
+            UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
+            if (uploadFile != null) {
+                UploadFileResDto uploadFileResDto = new UploadFileResDto(uploadFile);
+                movieReviewResDto.addUploadFile(uploadFileResDto);
+            }
+        }
+
+        return ResponseEntity.ok(movieReviewResDto);
     }
 
     @GetMapping

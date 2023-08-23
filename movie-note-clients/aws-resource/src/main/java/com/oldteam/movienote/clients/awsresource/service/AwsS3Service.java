@@ -1,6 +1,7 @@
 package com.oldteam.movienote.clients.awsresource.service;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.oldteam.movienote.clients.awsresource.dto.AwsFileInfo;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,11 @@ public class AwsS3Service {
         return AwsFileInfo.of(s3FileKey, newFileName, s3Url);
 
     }
+
+    public void deleteFile(String key) {
+        s3Client.deleteObject(new DeleteObjectRequest(BUCKET_NAME, key));
+    }
+
 
     public String getS3FileKey(String prefix, String fileName) {
         return getCurrentDeployProfile() + DELIMITER + prefix + DELIMITER + fileName;

@@ -4,6 +4,7 @@ import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
 import com.oldteam.movienote.api.domain.uploadfile.UploadFileService;
+import com.oldteam.movienote.clients.awsresource.service.AwsS3Service;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
@@ -34,6 +35,7 @@ public class MovieReviewService {
     private final MovieService movieService;
     private final MemberService memberService;
     private final UploadFileService uploadFileService;
+    private final AwsS3Service awsS3Service;
 
     public Page<MovieReview> findAll(Pageable pageable) {
         return movieReviewRepository.findAllJoinedMember(pageable);
@@ -80,9 +82,29 @@ public class MovieReviewService {
 
         String title = dto.getTitle();
         String content = dto.getContent();
-        List<Long> uploadFileIds = dto.getUploadFileIds();
 
         movieReview.update(title, content);
+
+        List<Long> uploadFileIds = dto.getUploadFileIds();
+
+        if (!uploadFileIds.isEmpty()) {
+
+            List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
+            for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
+                UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
+                awsS3Service.deleteFile(uploadFile.getS3Key());
+            }
+
+            movieReview.clearUploadFiles();
+
+            List<UploadFile> uploadFileList = uploadFileService.findByIds(uploadFileIds);
+            for (UploadFile uploadFile : uploadFileList) {
+                MovieReviewUploadFileRelation movieReviewUploadFileRelation = new MovieReviewUploadFileRelation();
+                movieReviewUploadFileRelation.setUploadFile(uploadFile);
+                movieReview.addFile(movieReviewUploadFileRelation);
+            }
+
+        }
 
         return movieReview;
     }
