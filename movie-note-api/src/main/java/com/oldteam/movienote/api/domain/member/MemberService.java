@@ -3,6 +3,8 @@ package com.oldteam.movienote.api.domain.member;
 import com.oldteam.movienote.api.domain.auth.dto.AuthSignUpReqDto;
 import com.oldteam.movienote.api.domain.uploadfile.UploadFileService;
 import com.oldteam.movienote.clients.awsresource.service.AwsS3Service;
+import com.oldteam.movienote.common.exception.HttpException;
+import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.member.MemberRole;
@@ -10,6 +12,7 @@ import com.oldteam.movienote.core.domain.member.repository.MemberRepository;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,8 +75,8 @@ public class MemberService {
 
     }
 
-    public Member findById(Long id) {
-        return memberRepository.findById(id).orElseThrow(RuntimeException::new);
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
     }
 
     public Member findByEmail(String email) {
@@ -83,7 +86,7 @@ public class MemberService {
         try {
             encryptEmail = AES256Util.encrypt(email);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EMAIL_ENCRYPT_FAIL, e);
         }
 
         return memberRepository.findByEmail(encryptEmail).orElseThrow(RuntimeException::new);

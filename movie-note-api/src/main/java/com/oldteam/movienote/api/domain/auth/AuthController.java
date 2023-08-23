@@ -4,6 +4,8 @@ import com.oldteam.movienote.api.domain.auth.dto.*;
 import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.utils.JwtUtil;
+import com.oldteam.movienote.common.exception.HttpException;
+import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import io.jsonwebtoken.Claims;
@@ -13,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -59,7 +62,11 @@ public class AuthController {
         }
 
         MemberTokenMapper memberTokenMapper = new MemberTokenMapper(claims);
-        Member member = memberService.findById(memberTokenMapper.getId());
+        Member member = memberService.findById(memberTokenMapper.getId())
+                .orElseThrow(() -> new HttpException(
+                        HttpStatus.BAD_REQUEST,
+                        HttpExceptionCode.NOT_FOUND,
+                        "존재하지 않는 회원입니다. memberId -> " + memberTokenMapper.getId()));
         String decryptedEmail;
 
         try {

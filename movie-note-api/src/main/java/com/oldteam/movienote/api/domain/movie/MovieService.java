@@ -4,6 +4,8 @@ import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieSaveReqDto;
 import com.oldteam.movienote.api.domain.uploadfile.UploadFileService;
+import com.oldteam.movienote.common.exception.HttpException;
+import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.Movie;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
@@ -12,6 +14,7 @@ import com.oldteam.movienote.core.domain.movie.repository.MovieRepository;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +50,11 @@ public class MovieService {
     public void addMovieReview(Long id, Long memberId, MovieReviewSaveReqDto dto) {
 
         Optional<Movie> optionalMovie = findById(id);
-        Member member = memberService.findById(memberId);
+        Member member = memberService.findById(memberId)
+                .orElseThrow(() -> new HttpException(
+                        HttpStatus.BAD_REQUEST,
+                        HttpExceptionCode.NOT_FOUND,
+                        "존재하지 않는 회원입니다. memberId -> " + memberId));
         List<Long> uploadFileIds = dto.getUploadFileIds();
         MovieReview movieReview = MovieReview.create(dto.getTitle(), dto.getContent());
 

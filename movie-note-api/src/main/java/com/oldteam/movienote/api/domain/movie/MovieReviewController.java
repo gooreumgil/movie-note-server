@@ -4,7 +4,10 @@ import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
+import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
+import com.oldteam.movienote.common.exception.HttpException;
+import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.common.dto.PageDto;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +38,11 @@ public class MovieReviewController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieReviewResDto> findOne(@PathVariable Long id) {
-        MovieReview movieReview = movieReviewService.findById(id).orElseThrow(RuntimeException::new);
+        MovieReview movieReview = movieReviewService.findById(id)
+                .orElseThrow(() -> new HttpException(
+                        HttpStatus.BAD_REQUEST,
+                        HttpExceptionCode.NOT_FOUND,
+                        "존재하지 않는 movieReview 입니다. movieReviewId -> " + id));
         MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
         Member member = movieReview.getMember();
         if (member != null) {
@@ -46,6 +54,12 @@ public class MovieReviewController {
             movieReviewResDto.setMemberResDto(memberResDto);
         }
         return ResponseEntity.ok(movieReviewResDto);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<MovieReviewResDto> update(@PathVariable Long id, @RequestBody MovieReviewUpdateReqDto dto) {
+
+        return null;
     }
 
     @GetMapping

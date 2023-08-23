@@ -56,4 +56,14 @@ public class MovieReview extends AuditingDomain implements Serializable {
         this.fileList.add(movieReviewUploadFileRelation);
         movieReviewUploadFileRelation.setMovieReview(this);
     }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void clearUploadFiles() {
+        this.fileList.clear();
+    }
+
 }
