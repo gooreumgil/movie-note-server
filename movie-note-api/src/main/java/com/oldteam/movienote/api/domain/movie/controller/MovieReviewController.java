@@ -12,6 +12,7 @@ import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.common.dto.PageDto;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
+import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
 import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
@@ -152,6 +153,7 @@ public class MovieReviewController {
 
     @PostMapping("/{id}/movie-review-likes")
     public ResponseEntity<Void> addReviewLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        MovieReviewLike movieReviewLike = movieReviewService.addReviewLike(id, tokenMapper.getId());
         return null;
     }
 

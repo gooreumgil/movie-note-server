@@ -9,6 +9,7 @@ import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
+import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
 import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
 import com.oldteam.movienote.core.domain.movie.repository.MovieReviewRepository;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
@@ -126,5 +127,18 @@ public class MovieReviewService {
 
     public Optional<MovieReview> findById(Long id) {
         return movieReviewRepository.findByIdJoinedMember(id);
+    }
+
+    public MovieReviewLike addReviewLike(Long id, Long memberId) {
+
+        MovieReview movieReview = findById(id)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
+
+        Member member = memberService.findById(memberId)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. " + memberId));
+
+
+
+        return null;
     }
 }

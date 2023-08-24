@@ -20,11 +20,11 @@ public class MovieReviewLikeHistory extends AuditingDomain {
     @Enumerated(EnumType.STRING)
     private ReviewLikeStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_review_id")
     private MovieReview movieReview;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

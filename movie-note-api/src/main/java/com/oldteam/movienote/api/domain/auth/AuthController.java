@@ -67,12 +67,13 @@ public class AuthController {
                         HttpStatus.BAD_REQUEST,
                         HttpExceptionCode.NOT_FOUND,
                         "존재하지 않는 회원입니다. memberId -> " + memberTokenMapper.getId()));
+
         String decryptedEmail;
 
         try {
             decryptedEmail = AES256Util.decrypt(member.getEmail());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EMAIL_ENCRYPT_FAIL, e.getMessage(), e);
         }
 
         boolean tokenExpired = jwtUtil.checkTokenExpired(claims.getExpiration());
