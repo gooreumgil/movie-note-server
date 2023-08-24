@@ -89,7 +89,8 @@ public class MemberService {
             throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EMAIL_ENCRYPT_FAIL, e);
         }
 
-        return memberRepository.findByEmail(encryptEmail).orElseThrow(RuntimeException::new);
+        return memberRepository.findByEmail(encryptEmail)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. email -> " + email));
     }
 
     public List<Member> findAll() {

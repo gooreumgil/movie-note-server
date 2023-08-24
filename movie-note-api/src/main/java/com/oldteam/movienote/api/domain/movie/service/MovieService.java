@@ -1,4 +1,4 @@
-package com.oldteam.movienote.api.domain.movie;
+package com.oldteam.movienote.api.domain.movie.service;
 
 import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;

@@ -1,7 +1,8 @@
-package com.oldteam.movienote.api.domain.movie;
+package com.oldteam.movienote.api.domain.movie.controller;
 
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
+import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
@@ -16,7 +17,6 @@ import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -149,6 +149,12 @@ public class MovieReviewController {
         return ResponseEntity.ok().build();
 
     }
+
+    @PostMapping("/{id}/movie-review-likes")
+    public ResponseEntity<Void> addReviewLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        return null;
+    }
+
 
 
 }

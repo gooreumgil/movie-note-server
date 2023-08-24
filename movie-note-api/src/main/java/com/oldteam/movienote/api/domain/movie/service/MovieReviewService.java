@@ -1,4 +1,4 @@
-package com.oldteam.movienote.api.domain.movie;
+package com.oldteam.movienote.api.domain.movie.service;
 
 import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
@@ -8,7 +8,6 @@ import com.oldteam.movienote.clients.awsresource.service.AwsS3Service;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
-import com.oldteam.movienote.core.domain.movie.Movie;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
 import com.oldteam.movienote.core.domain.movie.repository.MovieReviewRepository;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
