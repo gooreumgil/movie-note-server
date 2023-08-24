@@ -36,6 +36,15 @@ public class MovieReview extends AuditingDomain implements Serializable {
     @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
     private List<MovieReviewUploadFileRelation> fileList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
+    private List<MovieReviewLike> likeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
+    private List<MovieReviewLikeHistory> likeHistoryList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
+    private List<MovieReviewReply> replyList = new ArrayList<>();
+
     public static MovieReview create(String title, String content) {
         MovieReview movieReview = new MovieReview();
         movieReview.title = title;
@@ -66,4 +75,18 @@ public class MovieReview extends AuditingDomain implements Serializable {
         this.fileList.clear();
     }
 
+    public void addLike(MovieReviewLike movieReviewLike) {
+        this.likeList.add(movieReviewLike);
+        movieReviewLike.setMovieReview(this);
+    }
+
+    public void addLikeHistory(MovieReviewLikeHistory movieReviewLikeHistory) {
+        this.likeHistoryList.add(movieReviewLikeHistory);
+        movieReviewLikeHistory.setMovieReview(this);
+    }
+
+    public void addReply(MovieReviewReply movieReviewReply) {
+        this.replyList.add(movieReviewReply);
+        movieReviewReply.setMovieReview(this);
+    }
 }

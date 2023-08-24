@@ -11,23 +11,26 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovieReviewLikeHistory extends AuditingDomain {
+public class MovieReviewReply extends AuditingDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private ReviewLikeStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_review_id")
-    private MovieReview movieReview;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "movie_review_id")
+    private MovieReview movieReview;
+
+    public static MovieReviewReply create(String content) {
+        MovieReviewReply movieReviewReply = new MovieReviewReply();
+        movieReviewReply.content = content;
+        return movieReviewReply;
+    }
 
     public void setMovieReview(MovieReview movieReview) {
         this.movieReview = movieReview;

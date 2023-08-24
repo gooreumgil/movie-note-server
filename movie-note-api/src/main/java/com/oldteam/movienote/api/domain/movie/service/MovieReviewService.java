@@ -1,6 +1,7 @@
 package com.oldteam.movienote.api.domain.movie.service;
 
 import com.oldteam.movienote.api.domain.member.MemberService;
+import com.oldteam.movienote.api.domain.movie.dto.MovieReviewReplySaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
 import com.oldteam.movienote.api.domain.uploadfile.UploadFileService;
@@ -8,9 +9,7 @@ import com.oldteam.movienote.clients.awsresource.service.AwsS3Service;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
-import com.oldteam.movienote.core.domain.movie.MovieReview;
-import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
-import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
+import com.oldteam.movienote.core.domain.movie.*;
 import com.oldteam.movienote.core.domain.movie.repository.MovieReviewRepository;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +32,7 @@ public class MovieReviewService {
     private final MovieReviewRepository movieReviewRepository;
     private final MovieService movieService;
     private final MemberService memberService;
+    private final MovieReviewLikeService movieReviewLikeService;
     private final UploadFileService uploadFileService;
     private final AwsS3Service awsS3Service;
 
@@ -129,7 +129,13 @@ public class MovieReviewService {
         return movieReviewRepository.findByIdJoinedMember(id);
     }
 
-    public MovieReviewLike addReviewLike(Long id, Long memberId) {
+    @Transactional
+    public MovieReviewLike addLike(Long id, Long memberId) {
+
+        boolean exits = movieReviewLikeService.exitsByMovieReviewIdAndMemberId(id, memberId);
+        if (exits) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.ALREADY_EXIST, "이미 좋아요한 movieReview 입니다. movieReviewId -> " + id);
+        }
 
         MovieReview movieReview = findById(id)
                 .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
@@ -137,8 +143,34 @@ public class MovieReviewService {
         Member member = memberService.findById(memberId)
                 .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. " + memberId));
 
+        MovieReviewLike movieReviewLike = new MovieReviewLike();
+        MovieReviewLikeHistory movieReviewLikeHistory = new MovieReviewLikeHistory();
 
+        movieReview.addLike(movieReviewLike);
+        member.addReviewLike(movieReviewLike);
 
-        return null;
+        movieReview.addLikeHistory(movieReviewLikeHistory);
+        member.addReviewLikeHistory(movieReviewLikeHistory);
+
+        return movieReviewLike;
+    }
+
+    @Transactional
+    public MovieReviewReply addReply(Long id, Long memberId, MovieReviewReplySaveReqDto dto) {
+
+        MovieReview movieReview = findById(id)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
+
+        Member member = memberService.findById(memberId)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. " + memberId));
+
+        String content = dto.getContent();
+        MovieReviewReply movieReviewReply = MovieReviewReply.create(content);
+
+        movieReview.addReply(movieReviewReply);
+        member.addReviewReply(movieReviewReply);
+
+        return movieReviewReply;
+
     }
 }

@@ -2,6 +2,9 @@ package com.oldteam.movienote.core.domain.member;
 
 import com.oldteam.movienote.core.audit.AuditingDomain;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
+import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
+import com.oldteam.movienote.core.domain.movie.MovieReviewLikeHistory;
+import com.oldteam.movienote.core.domain.movie.MovieReviewReply;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +40,15 @@ public class Member extends AuditingDomain {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MovieReview> movieReviewList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MovieReviewLike> reviewLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MovieReviewLikeHistory> reviewLikeHistoryList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MovieReviewReply> replyList = new ArrayList<>();
+
     public static Member create(String name, String nickname, String email, String password, MemberRole memberRole) {
         Member member = new Member();
         member.name = name;
@@ -56,4 +68,15 @@ public class Member extends AuditingDomain {
         movieReview.setMember(this);
     }
 
+    public void addReviewLike(MovieReviewLike movieReviewLike) {
+        this.reviewLikeList.add(movieReviewLike);
+    }
+
+    public void addReviewLikeHistory(MovieReviewLikeHistory movieReviewLikeHistory) {
+        this.reviewLikeHistoryList.add(movieReviewLikeHistory);
+    }
+
+    public void addReviewReply(MovieReviewReply movieReviewReply) {
+        this.replyList.add(movieReviewReply);
+    }
 }

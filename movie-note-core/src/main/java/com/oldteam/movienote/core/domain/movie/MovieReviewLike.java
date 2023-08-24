@@ -25,4 +25,7 @@ public class MovieReviewLike extends AuditingDomain {
     @JoinColumn(name = "movie_review_id")
     private MovieReview movieReview;
 
+    public void setMovieReview(MovieReview movieReview) {
+        this.movieReview = movieReview;
+    }
 }

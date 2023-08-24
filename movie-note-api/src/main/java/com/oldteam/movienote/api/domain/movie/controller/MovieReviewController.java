@@ -2,10 +2,8 @@ package com.oldteam.movienote.api.domain.movie.controller;
 
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
+import com.oldteam.movienote.api.domain.movie.dto.*;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
-import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
-import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
-import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
@@ -13,6 +11,7 @@ import com.oldteam.movienote.core.common.dto.PageDto;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
+import com.oldteam.movienote.core.domain.movie.MovieReviewReply;
 import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
@@ -151,12 +150,17 @@ public class MovieReviewController {
 
     }
 
-    @PostMapping("/{id}/movie-review-likes")
-    public ResponseEntity<Void> addReviewLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
-        MovieReviewLike movieReviewLike = movieReviewService.addReviewLike(id, tokenMapper.getId());
-        return null;
+    @PostMapping("/{id}/likes")
+    public ResponseEntity<MovieReviewLikeResDto> addLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        MovieReviewLike movieReviewLike = movieReviewService.addLike(id, tokenMapper.getId());
+        return ResponseEntity.ok(new MovieReviewLikeResDto(movieReviewLike));
     }
 
+    @PostMapping("/{id}/replies")
+    public ResponseEntity<MovieReviewReplyResDto> addReply(@PathVariable Long id, @RequestBody MovieReviewReplySaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        MovieReviewReply movieReviewReply = movieReviewService.addReply(id, tokenMapper.getId(), dto);
+        return ResponseEntity.ok(new MovieReviewReplyResDto(movieReviewReply));
+    }
 
 
 }
