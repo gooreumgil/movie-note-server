@@ -80,5 +80,6 @@ public class Member extends AuditingDomain {
 
     public void addReviewReply(MovieReviewReply movieReviewReply) {
         this.replyList.add(movieReviewReply);
+        movieReviewReply.setMember(this);
     }
 }
