@@ -3,6 +3,8 @@ package com.oldteam.movienote.api.domain.movie.controller;
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.domain.movie.dto.*;
+import com.oldteam.movienote.api.domain.movie.helper.MovieReviewHelper;
+import com.oldteam.movienote.api.domain.movie.service.MovieReviewReplyService;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.common.exception.HttpException;
@@ -35,6 +37,8 @@ import java.util.List;
 public class MovieReviewController {
 
     private final MovieReviewService movieReviewService;
+    private final MovieReviewReplyService movieReviewReplyService;
+    private final MovieReviewHelper movieReviewHelper;
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieReviewResDto> findOne(@PathVariable Long id) {
@@ -43,44 +47,17 @@ public class MovieReviewController {
                         HttpStatus.BAD_REQUEST,
                         HttpExceptionCode.NOT_FOUND,
                         "존재하지 않는 movieReview 입니다. movieReviewId -> " + id));
-        MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
-        Member member = movieReview.getMember();
-        if (member != null) {
-            MemberResDto memberResDto = new MemberResDto(member);
-            UploadFile uploadFile = member.getUploadFile();
-            if (uploadFile != null) {
-                memberResDto.setProfileImageUrl(uploadFile.getUrl());
-            }
-            movieReviewResDto.setMemberResDto(memberResDto);
-        }
+
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
         return ResponseEntity.ok(movieReviewResDto);
+
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<MovieReviewResDto> update(@PathVariable Long id, @RequestBody MovieReviewUpdateReqDto dto) {
 
         MovieReview movieReview = movieReviewService.update(id, dto);
-        MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
-
-        Member member = movieReview.getMember();
-        MemberResDto memberResDto = new MemberResDto(member);
-
-        UploadFile profileImage = member.getUploadFile();
-        if (profileImage != null) {
-            memberResDto.setProfileImageUrl(profileImage.getUrl());
-        }
-
-        movieReviewResDto.setMemberResDto(memberResDto);
-
-        List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
-
-        for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
-            UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
-            if (uploadFile != null) {
-                UploadFileResDto uploadFileResDto = new UploadFileResDto(uploadFile);
-                movieReviewResDto.addUploadFile(uploadFileResDto);
-            }
-        }
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
 
         return ResponseEntity.ok(movieReviewResDto);
     }
@@ -90,33 +67,7 @@ public class MovieReviewController {
             @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAll(pageable);
-        List<MovieReviewResDto> movieReviewResDtos = movieReviewPage.map(movieReview -> {
-
-            MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
-
-            Member member = movieReview.getMember();
-            MemberResDto memberResDto = new MemberResDto(member);
-
-            UploadFile profileImage = member.getUploadFile();
-            if (profileImage != null) {
-                memberResDto.setProfileImageUrl(profileImage.getUrl());
-            }
-
-            movieReviewResDto.setMemberResDto(memberResDto);
-
-            List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
-
-            for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
-                UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
-                if (uploadFile != null) {
-                    UploadFileResDto uploadFileResDto = new UploadFileResDto(uploadFile);
-                    movieReviewResDto.addUploadFile(uploadFileResDto);
-                }
-            }
-
-            return movieReviewResDto;
-
-        }).toList();
+        List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtos));
 
@@ -126,19 +77,7 @@ public class MovieReviewController {
     public ResponseEntity<MovieReviewResDto> save(@RequestBody MovieReviewSaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
         MovieReview movieReview = movieReviewService.save(dto, tokenMapper.getId());
-
-        MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
-        List<MovieReviewUploadFileRelation> fileList = movieReview.getFileList();
-
-        for (MovieReviewUploadFileRelation movieReviewUploadFileRelation : fileList) {
-
-            UploadFile uploadFile = movieReviewUploadFileRelation.getUploadFile();
-            if (uploadFile != null) {
-                UploadFileResDto uploadFileResDto = new UploadFileResDto(uploadFile);
-                movieReviewResDto.addUploadFile(uploadFileResDto);
-            }
-
-        }
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
 
         return ResponseEntity.ok(movieReviewResDto);
     }
@@ -154,6 +93,30 @@ public class MovieReviewController {
     public ResponseEntity<MovieReviewLikeResDto> addLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         MovieReviewLike movieReviewLike = movieReviewService.addLike(id, tokenMapper.getId());
         return ResponseEntity.ok(new MovieReviewLikeResDto(movieReviewLike));
+    }
+
+    @GetMapping("/{id}/replies")
+    public ResponseEntity<?> findReplies(
+            @PathVariable Long id,
+            @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<MovieReviewReply> movieReviewReplyPage = movieReviewReplyService.findAllByMovieReviewId(id, pageable);
+        List<MovieReviewReplyResDto> movieReviewReplyResDtoList = movieReviewReplyPage.map(movieReviewReply -> {
+            MovieReviewReplyResDto movieReviewReplyResDto = new MovieReviewReplyResDto(movieReviewReply);
+            Member member = movieReviewReply.getMember();
+            if (member != null) {
+                try {
+                    movieReviewReplyResDto.setMember(member);
+                } catch (Exception e) {
+                    log.error("findReplies -> email decrypt exception, errorMessage={}", e.getMessage());
+                }
+            }
+
+            return movieReviewReplyResDto;
+        }).toList();
+
+        return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewReplyPage, movieReviewReplyResDtoList));
+
     }
 
     @PostMapping("/{id}/replies")

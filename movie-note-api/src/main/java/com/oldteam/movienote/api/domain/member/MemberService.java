@@ -9,9 +9,12 @@ import com.oldteam.movienote.common.utils.AES256Util;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.member.MemberRole;
 import com.oldteam.movienote.core.domain.member.repository.MemberRepository;
+import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -64,12 +67,6 @@ public class MemberService {
             Optional<UploadFile> optionalUploadFile = uploadFileService.findById(uploadFileId);
             optionalUploadFile.ifPresent(savedMember::setUploadFile);
         }
-//        try {
-//            String imageUrl = awsS3Service.saveFile(profileImage, MEMBER_DIRECTORY + "/" + savedMember.getId() + "/" + MEMBER_PROFILE_IMAGE_DIRECTORY);
-//            savedMember.setImageUrl(imageUrl);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
 
         return savedMember;
 
@@ -91,10 +88,6 @@ public class MemberService {
 
         return memberRepository.findByEmail(encryptEmail)
                 .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. email -> " + email));
-    }
-
-    public List<Member> findAll() {
-        return memberRepository.findAll();
     }
 
 }

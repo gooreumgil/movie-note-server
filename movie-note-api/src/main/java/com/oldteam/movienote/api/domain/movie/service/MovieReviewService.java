@@ -40,6 +40,10 @@ public class MovieReviewService {
         return movieReviewRepository.findAllJoinedMember(pageable);
     }
 
+    public Page<MovieReview> findAllByMemberId(Long memberId, Pageable pageable) {
+        return movieReviewRepository.findAllByMemberIdCustom(memberId, pageable);
+    }
+
     @Transactional
     public MovieReview save(MovieReviewSaveReqDto dto, Long memberId) {
 
@@ -173,4 +177,7 @@ public class MovieReviewService {
         return movieReviewReply;
 
     }
+
+
+
 }
