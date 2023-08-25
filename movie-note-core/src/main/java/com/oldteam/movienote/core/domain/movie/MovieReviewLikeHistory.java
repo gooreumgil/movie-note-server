@@ -32,4 +32,8 @@ public class MovieReviewLikeHistory extends AuditingDomain {
     public void setMovieReview(MovieReview movieReview) {
         this.movieReview = movieReview;
     }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }

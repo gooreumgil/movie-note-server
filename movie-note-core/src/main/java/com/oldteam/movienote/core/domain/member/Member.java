@@ -70,10 +70,12 @@ public class Member extends AuditingDomain {
 
     public void addReviewLike(MovieReviewLike movieReviewLike) {
         this.reviewLikeList.add(movieReviewLike);
+        movieReviewLike.setMember(this);
     }
 
     public void addReviewLikeHistory(MovieReviewLikeHistory movieReviewLikeHistory) {
         this.reviewLikeHistoryList.add(movieReviewLikeHistory);
+        movieReviewLikeHistory.setMember(this);
     }
 
     public void addReviewReply(MovieReviewReply movieReviewReply) {
