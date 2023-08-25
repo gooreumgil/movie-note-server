@@ -28,6 +28,9 @@ public class MovieReviewLikeHistory extends AuditingDomain {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public MovieReviewLikeHistory(ReviewLikeStatus status) {
+        this.status = status;
+    }
 
     public void setMovieReview(MovieReview movieReview) {
         this.movieReview = movieReview;

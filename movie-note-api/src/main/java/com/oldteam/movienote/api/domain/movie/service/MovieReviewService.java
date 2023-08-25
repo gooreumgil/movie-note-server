@@ -148,7 +148,7 @@ public class MovieReviewService {
                 .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. " + memberId));
 
         MovieReviewLike movieReviewLike = new MovieReviewLike();
-        MovieReviewLikeHistory movieReviewLikeHistory = new MovieReviewLikeHistory();
+        MovieReviewLikeHistory movieReviewLikeHistory = new MovieReviewLikeHistory(ReviewLikeStatus.LIKE);
 
         movieReview.addLike(movieReviewLike);
         member.addReviewLike(movieReviewLike);
