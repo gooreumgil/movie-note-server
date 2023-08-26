@@ -30,7 +30,7 @@ class MovieReviewQuerydslRepositoryImpl extends Querydsl5RepositorySupport imple
     public Page<MovieReview> findAllByCondition(MovieReviewSearchCondition searchCondition, Pageable pageable) {
         return applyPagination(pageable, query -> query
                 .selectFrom(movieReview)
-                .innerJoin(movieReview.movie).fetchJoin()
+                .leftJoin(movieReview.movie).fetchJoin()
                 .innerJoin(movieReview.member, member).fetchJoin()
                 .leftJoin(member.uploadFile).fetchJoin()
                 .where(
