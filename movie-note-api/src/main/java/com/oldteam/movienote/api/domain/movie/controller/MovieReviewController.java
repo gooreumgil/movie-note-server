@@ -67,6 +67,7 @@ public class MovieReviewController {
 
         MovieReviewSearchCondition movieReviewSearchCondition = new MovieReviewSearchCondition();
         movieReviewSearchCondition.setQuery(query);
+        System.out.println("findAll -> movieReviewSearchCondition -> query = " + movieReviewSearchCondition.getQuery());
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAllByCondition(movieReviewSearchCondition, pageable);
         List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
