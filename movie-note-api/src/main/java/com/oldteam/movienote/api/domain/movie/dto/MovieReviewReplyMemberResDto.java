@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,9 +19,13 @@ public class MovieReviewReplyMemberResDto {
     private String nickname;
     private String email;
 
-    public MovieReviewReplyMemberResDto(Member member) throws Exception {
+    public MovieReviewReplyMemberResDto(Member member) {
         this.id = member.getId();
         this.nickname = member.getNickname();
-        this.email = AES256Util.decrypt(member.getEmail());
+        try {
+            this.email = AES256Util.decrypt(member.getEmail());
+        } catch (Exception e) {
+            log.error("email decrypt error, message={}", e.getMessage());
+        }
     }
 }

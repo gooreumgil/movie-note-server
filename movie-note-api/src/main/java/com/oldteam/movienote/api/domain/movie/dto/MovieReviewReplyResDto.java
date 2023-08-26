@@ -28,7 +28,7 @@ public class MovieReviewReplyResDto {
         this.updatedDateTime = movieReviewReply.getUpdatedDateTime();
     }
 
-    public void setMember(Member member) throws Exception {
+    public void setMember(Member member) {
         this.member = new MovieReviewReplyMemberResDto(member);
     }
 

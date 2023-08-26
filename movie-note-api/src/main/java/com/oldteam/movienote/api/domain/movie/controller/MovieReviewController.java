@@ -5,6 +5,7 @@ import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.api.domain.movie.dto.*;
 import com.oldteam.movienote.api.domain.movie.helper.MovieReviewHelper;
+import com.oldteam.movienote.api.domain.movie.helper.MovieReviewReplyHelper;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewReplyService;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
@@ -40,6 +41,7 @@ public class MovieReviewController {
     private final MovieReviewService movieReviewService;
     private final MovieReviewReplyService movieReviewReplyService;
     private final MovieReviewHelper movieReviewHelper;
+    private final MovieReviewReplyHelper movieReviewReplyHelper;
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieReviewResDto> findOne(@PathVariable Long id) {
@@ -106,19 +108,7 @@ public class MovieReviewController {
             @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<MovieReviewReply> movieReviewReplyPage = movieReviewReplyService.findAllByMovieReviewId(id, pageable);
-        List<MovieReviewReplyResDto> movieReviewReplyResDtoList = movieReviewReplyPage.map(movieReviewReply -> {
-            MovieReviewReplyResDto movieReviewReplyResDto = new MovieReviewReplyResDto(movieReviewReply);
-            Member member = movieReviewReply.getMember();
-            if (member != null) {
-                try {
-                    movieReviewReplyResDto.setMember(member);
-                } catch (Exception e) {
-                    log.error("findReplies -> email decrypt exception, errorMessage={}", e.getMessage());
-                }
-            }
-
-            return movieReviewReplyResDto;
-        }).toList();
+        List<MovieReviewReplyResDto> movieReviewReplyResDtoList = movieReviewReplyHelper.convertPageToMovieReviewReplyResDto(movieReviewReplyPage).toList();
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewReplyPage, movieReviewReplyResDtoList));
 
@@ -127,7 +117,8 @@ public class MovieReviewController {
     @PostMapping("/{id}/replies")
     public ResponseEntity<MovieReviewReplyResDto> addReply(@PathVariable Long id, @RequestBody MovieReviewReplySaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         MovieReviewReply movieReviewReply = movieReviewService.addReply(id, tokenMapper.getId(), dto);
-        return ResponseEntity.ok(new MovieReviewReplyResDto(movieReviewReply));
+        MovieReviewReplyResDto movieReviewReplyResDto = movieReviewReplyHelper.convertToMovieReviewReplyResDto(movieReviewReply);
+        return ResponseEntity.ok(movieReviewReplyResDto);
     }
 
 

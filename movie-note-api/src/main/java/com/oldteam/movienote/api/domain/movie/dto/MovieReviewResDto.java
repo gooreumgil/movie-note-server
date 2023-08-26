@@ -3,7 +3,6 @@ package com.oldteam.movienote.api.domain.movie.dto;
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
-import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +25,7 @@ public class MovieReviewResDto {
     private LocalDateTime createdDateTime;
     private LocalDateTime updatedDateTime;
 
-    private MemberResDto memberResDto;
+    private MemberResDto member;
 
     public MovieReviewResDto(MovieReview movieReview) {
         this.id = movieReview.getId();
