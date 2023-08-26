@@ -1,9 +1,11 @@
 package com.oldteam.movienote.api.domain.movie.service;
 
 import com.oldteam.movienote.api.domain.member.MemberService;
+import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewReplySaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
+import com.oldteam.movienote.api.domain.movie.repository.MovieReviewQuerydslRepository;
 import com.oldteam.movienote.api.domain.uploadfile.UploadFileService;
 import com.oldteam.movienote.clients.awsresource.service.AwsS3Service;
 import com.oldteam.movienote.common.exception.HttpException;
@@ -30,6 +32,7 @@ import java.util.Optional;
 public class MovieReviewService {
 
     private final MovieReviewRepository movieReviewRepository;
+    private final MovieReviewQuerydslRepository movieReviewQuerydslRepository;
     private final MovieService movieService;
     private final MemberService memberService;
     private final MovieReviewLikeService movieReviewLikeService;
@@ -38,6 +41,10 @@ public class MovieReviewService {
 
     public Page<MovieReview> findAll(Pageable pageable) {
         return movieReviewRepository.findAllJoinedMember(pageable);
+    }
+
+    public Page<MovieReview> findAllByCondition(MovieReviewSearchCondition condition, Pageable pageable) {
+        return movieReviewQuerydslRepository.findAllByCondition(condition, pageable);
     }
 
     public Page<MovieReview> findAllByMemberId(Long memberId, Pageable pageable) {

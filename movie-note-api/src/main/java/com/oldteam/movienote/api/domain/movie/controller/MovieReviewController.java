@@ -2,6 +2,7 @@ package com.oldteam.movienote.api.domain.movie.controller;
 
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
+import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.api.domain.movie.dto.*;
 import com.oldteam.movienote.api.domain.movie.helper.MovieReviewHelper;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewReplyService;
@@ -64,9 +65,13 @@ public class MovieReviewController {
 
     @GetMapping
     public ResponseEntity<PageDto.ListResponse<MovieReviewResDto>> findAll(
+            @RequestParam(required = false) String query,
             @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        Page<MovieReview> movieReviewPage = movieReviewService.findAll(pageable);
+        MovieReviewSearchCondition movieReviewSearchCondition = new MovieReviewSearchCondition();
+        movieReviewSearchCondition.setQuery(query);
+
+        Page<MovieReview> movieReviewPage = movieReviewService.findAllByCondition(movieReviewSearchCondition, pageable);
         List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtos));
