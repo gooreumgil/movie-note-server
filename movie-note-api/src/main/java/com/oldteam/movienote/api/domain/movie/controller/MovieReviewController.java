@@ -1,6 +1,5 @@
 package com.oldteam.movienote.api.domain.movie.controller;
 
-import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.api.domain.movie.dto.*;
@@ -8,16 +7,12 @@ import com.oldteam.movienote.api.domain.movie.helper.MovieReviewHelper;
 import com.oldteam.movienote.api.domain.movie.helper.MovieReviewReplyHelper;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewReplyService;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
-import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.common.dto.PageDto;
-import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
 import com.oldteam.movienote.core.domain.movie.MovieReviewReply;
-import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
-import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;

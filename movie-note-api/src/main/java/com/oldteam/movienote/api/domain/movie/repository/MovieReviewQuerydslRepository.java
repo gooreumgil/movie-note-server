@@ -3,8 +3,10 @@ package com.oldteam.movienote.api.domain.movie.repository;
 import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.utils.Querydsl5RepositorySupport;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -32,18 +34,13 @@ class MovieReviewQuerydslRepositoryImpl extends Querydsl5RepositorySupport imple
                 .innerJoin(movieReview.member, member).fetchJoin()
                 .leftJoin(member.uploadFile).fetchJoin()
                 .where(
-                        containsContent(searchCondition.getQuery()),
-                        containsTitle(searchCondition.getQuery())
+                        containsQuery(searchCondition.getQuery())
                 )
         );
     }
 
-    private BooleanExpression containsContent(String query) {
-        return query != null ? movieReview.content.contains(query) : null;
-    }
-
-    private BooleanExpression containsTitle(String query) {
-        return query != null ? movieReview.title.contains(query) : null;
+    private BooleanExpression containsQuery(String query) {
+        return StringUtils.isNotEmpty(query) ? movieReview.title.contains(query).or(movieReview.content.contains(query)) : null;
     }
 
 
