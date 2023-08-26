@@ -20,7 +20,7 @@ public interface MovieReviewQuerydslRepository {
 @Repository
 class MovieReviewQuerydslRepositoryImpl extends Querydsl5RepositorySupport implements MovieReviewQuerydslRepository {
 
-    public MovieReviewQuerydslRepositoryImpl(Class<?> domainClass) {
+    public MovieReviewQuerydslRepositoryImpl() {
         super(MovieReview.class);
     }
 
