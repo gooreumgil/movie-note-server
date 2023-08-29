@@ -184,7 +184,4 @@ public class MovieReviewService {
         return movieReviewReply;
 
     }
-
-
-
 }
