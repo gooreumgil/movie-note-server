@@ -38,6 +38,7 @@ public class MovieNoteApiSecurityConfig {
                                         "/api/v1/auth/login",
                                         "/api/v1/auth/sign-up",
                                         "/api/v1/movie-reviews",
+                                        "/api/v1/movies",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()

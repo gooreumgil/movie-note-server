@@ -5,3 +5,4 @@ include 'movie-note-core'
 include 'movie-note-common'
 
 include 'movie-note-clients:aws-resource'
+include 'movie-note-clients:kobis'

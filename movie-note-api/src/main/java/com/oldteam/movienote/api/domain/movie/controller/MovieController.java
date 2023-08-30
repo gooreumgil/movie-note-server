@@ -3,14 +3,22 @@ package com.oldteam.movienote.api.domain.movie.controller;
 import com.oldteam.movienote.api.domain.movie.service.MovieService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieSaveReqDto;
+import com.oldteam.movienote.clients.kobis.dto.KobisMovieReqDto;
+import com.oldteam.movienote.clients.kobis.dto.MovieListResultWrapper;
+import com.oldteam.movienote.clients.kobis.provider.KobisProvider;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.movie.Movie;
+import io.swagger.v3.oas.annotations.headers.Header;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RestController
@@ -19,12 +27,28 @@ import org.springframework.web.bind.annotation.*;
 public class MovieController {
 
     private final MovieService movieService;
+    private final KobisProvider kobisProvider;
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieResDto> findOne(@PathVariable Long id) {
+    public ResponseEntity<MovieResDto> findById(@PathVariable Long id) {
         Movie movie = movieService.findById(id).orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movie 입니다. movieId -> " + id));
         MovieResDto movieResDto = new MovieResDto(movie.getId(), movie.getCode(), movie.getImageUrl());
         return ResponseEntity.ok(movieResDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<MovieListResultWrapper> findAll(@RequestParam String query) {
+
+        MovieListResultWrapper movies;
+
+        try {
+            movies = kobisProvider.getMovies(query);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EXTERNAL_EXCEPTION, e.getMessage());
+        }
+
+        return ResponseEntity.ok(movies);
+
     }
 
     @PostMapping

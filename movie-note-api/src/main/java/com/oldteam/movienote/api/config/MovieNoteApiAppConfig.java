@@ -2,6 +2,7 @@ package com.oldteam.movienote.api.config;
 
 import com.oldteam.movienote.api.utils.JwtUtil;
 import com.oldteam.movienote.clients.awsresource.config.AwsResourceConfig;
+import com.oldteam.movienote.clients.kobis.config.KobisConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@Import({AwsResourceConfig.class})
+@Import({AwsResourceConfig.class, KobisConfig.class})
 public class MovieNoteApiAppConfig {
 
     @Value("${jwt.secret-key}")
