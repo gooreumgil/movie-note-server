@@ -39,6 +39,7 @@ public class MovieNoteApiSecurityConfig {
                                         "/api/v1/auth/sign-up",
                                         "/api/v1/movie-reviews",
                                         "/api/v1/movie-reviews/{id}",
+                                        "/api/v1/movie-reviews/{id}/replies",
                                         "/api/v1/movies",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
@@ -57,11 +58,6 @@ public class MovieNoteApiSecurityConfig {
 
         return http.build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web) -> web.ignoring().requestMatchers("/swagger-ui/**");
-//    }
 
     @Bean
     public RoleHierarchy roleHierarchy() {
