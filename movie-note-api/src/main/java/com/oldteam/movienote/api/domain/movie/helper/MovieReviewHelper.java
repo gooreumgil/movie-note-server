@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieReviewHelper {
 
-    public MovieReviewResDto convertMovieReviewResDto(MovieReview movieReview) {
+    public MovieReviewResDto convertMovieReviewResDto(MovieReview movieReview, Long memberId) {
 
         MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
 
@@ -46,7 +46,11 @@ public class MovieReviewHelper {
     }
 
     public Page<MovieReviewResDto> convertPageToMovieReviewResDto(Page<MovieReview> movieReviewPage) {
-        return movieReviewPage.map(this::convertMovieReviewResDto);
+        return movieReviewPage.map(movieReview -> convertMovieReviewResDto(movieReview, null));
+    }
+
+    public Page<MovieReviewResDto> convertPageToMovieReviewResDto(Page<MovieReview> movieReviewPage, Long memberId) {
+        return movieReviewPage.map(movieReview -> convertMovieReviewResDto(movieReview, memberId));
     }
 
 }

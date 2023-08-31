@@ -39,55 +39,31 @@ public class MovieReviewController {
     private final MovieReviewReplyHelper movieReviewReplyHelper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<MovieReviewResDto> findOne(@PathVariable Long id) {
+    public ResponseEntity<MovieReviewResDto> findOne(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         MovieReview movieReview = movieReviewService.findById(id)
                 .orElseThrow(() -> new HttpException(
                         HttpStatus.BAD_REQUEST,
                         HttpExceptionCode.NOT_FOUND,
                         "존재하지 않는 movieReview 입니다. movieReviewId -> " + id));
 
-        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview, tokenMapper.getId());
         return ResponseEntity.ok(movieReviewResDto);
 
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<MovieReviewResDto> update(@PathVariable Long id, @RequestBody MovieReviewUpdateReqDto dto) {
-
-        MovieReview movieReview = movieReviewService.update(id, dto);
-        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
-
-        return ResponseEntity.ok(movieReviewResDto);
     }
 
     @GetMapping
     public ResponseEntity<PageDto.ListResponse<MovieReviewResDto>> findAll(
             @RequestParam(required = false) String query,
-            @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+            @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
         MovieReviewSearchCondition movieReviewSearchCondition = new MovieReviewSearchCondition();
         movieReviewSearchCondition.setQuery(query);
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAllByCondition(movieReviewSearchCondition, pageable);
-        List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
+        List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage, tokenMapper.getId()).toList();
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtos));
-
-    }
-
-    @PostMapping
-    public ResponseEntity<MovieReviewResDto> save(@RequestBody MovieReviewSaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
-
-        MovieReview movieReview = movieReviewService.save(dto, tokenMapper.getId());
-        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
-
-        return ResponseEntity.ok(movieReviewResDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
-        movieReviewService.deleteById(id, tokenMapper.getId());
-        return ResponseEntity.ok().build();
 
     }
 
@@ -98,7 +74,7 @@ public class MovieReviewController {
     }
 
     @GetMapping("/{id}/replies")
-    public ResponseEntity<?> findReplies(
+    public ResponseEntity<PageDto.ListResponse<MovieReviewReplyResDto>> findReplies(
             @PathVariable Long id,
             @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
 

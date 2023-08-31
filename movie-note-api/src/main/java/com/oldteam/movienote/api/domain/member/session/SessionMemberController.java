@@ -3,6 +3,8 @@ package com.oldteam.movienote.api.domain.member.session;
 import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
+import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
+import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
 import com.oldteam.movienote.api.domain.movie.helper.MovieReviewHelper;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.core.common.dto.PageDto;
@@ -16,9 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,9 +37,34 @@ public class SessionMemberController {
             @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAllByMemberId(tokenMapper.getId(), pageable);
-        List<MovieReviewResDto> movieReviewResDtoList = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
+        List<MovieReviewResDto> movieReviewResDtoList = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage, tokenMapper.getId()).toList();
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtoList));
+    }
+
+    @PostMapping("/movie-reviews")
+    public ResponseEntity<MovieReviewResDto> save(@RequestBody MovieReviewSaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+
+        MovieReview movieReview = movieReviewService.save(dto, tokenMapper.getId());
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview, tokenMapper.getId());
+
+        return ResponseEntity.ok(movieReviewResDto);
+    }
+
+    @PatchMapping("/movie-reviews/{movieReviewId}")
+    public ResponseEntity<MovieReviewResDto> update(@PathVariable Long movieReviewId, @RequestBody MovieReviewUpdateReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+
+        MovieReview movieReview = movieReviewService.update(movieReviewId, dto);
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview, tokenMapper.getId());
+
+        return ResponseEntity.ok(movieReviewResDto);
+    }
+
+    @DeleteMapping("/movie-reviews/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        movieReviewService.deleteById(id, tokenMapper.getId());
+        return ResponseEntity.ok().build();
+
     }
 
 }
