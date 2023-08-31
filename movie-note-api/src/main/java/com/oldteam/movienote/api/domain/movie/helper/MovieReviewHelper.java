@@ -2,6 +2,7 @@ package com.oldteam.movienote.api.domain.movie.helper;
 
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
+import com.oldteam.movienote.api.domain.movie.service.MovieReviewLikeService;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
@@ -17,7 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieReviewHelper {
 
-    public MovieReviewResDto convertMovieReviewResDto(MovieReview movieReview, Long memberId) {
+    private final MovieReviewLikeService movieReviewLikeService;
+
+    public MovieReviewResDto convertMovieReviewResDto(MovieReview movieReview) {
 
         MovieReviewResDto movieReviewResDto = new MovieReviewResDto(movieReview);
 
@@ -45,12 +48,12 @@ public class MovieReviewHelper {
 
     }
 
-    public Page<MovieReviewResDto> convertPageToMovieReviewResDto(Page<MovieReview> movieReviewPage) {
-        return movieReviewPage.map(movieReview -> convertMovieReviewResDto(movieReview, null));
+    public void setMovieReviewLiked(MovieReviewResDto movieReviewResDto, Long sessionMemberId) {
+        movieReviewResDto.setLiked(movieReviewLikeService.exitsByMovieReviewIdAndMemberId(movieReviewResDto.getId(), sessionMemberId));
     }
 
-    public Page<MovieReviewResDto> convertPageToMovieReviewResDto(Page<MovieReview> movieReviewPage, Long memberId) {
-        return movieReviewPage.map(movieReview -> convertMovieReviewResDto(movieReview, memberId));
+    public Page<MovieReviewResDto> convertPageToMovieReviewResDto(Page<MovieReview> movieReviewPage) {
+        return movieReviewPage.map(this::convertMovieReviewResDto);
     }
 
 }

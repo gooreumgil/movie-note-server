@@ -26,6 +26,7 @@ public class MovieReviewResDto {
     private LocalDateTime updatedDateTime;
 
     private MemberResDto member;
+    private Boolean liked;
 
     public MovieReviewResDto(MovieReview movieReview) {
         this.id = movieReview.getId();

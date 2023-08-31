@@ -37,7 +37,10 @@ public class SessionMemberController {
             @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAllByMemberId(tokenMapper.getId(), pageable);
-        List<MovieReviewResDto> movieReviewResDtoList = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage, tokenMapper.getId()).toList();
+        List<MovieReviewResDto> movieReviewResDtoList = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
+        for (MovieReviewResDto movieReviewResDto : movieReviewResDtoList) {
+            movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+        }
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtoList));
     }
@@ -46,7 +49,7 @@ public class SessionMemberController {
     public ResponseEntity<MovieReviewResDto> save(@RequestBody MovieReviewSaveReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
         MovieReview movieReview = movieReviewService.save(dto, tokenMapper.getId());
-        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview, tokenMapper.getId());
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
 
         return ResponseEntity.ok(movieReviewResDto);
     }
@@ -55,7 +58,8 @@ public class SessionMemberController {
     public ResponseEntity<MovieReviewResDto> update(@PathVariable Long movieReviewId, @RequestBody MovieReviewUpdateReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
         MovieReview movieReview = movieReviewService.update(movieReviewId, dto);
-        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview, tokenMapper.getId());
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
+        movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
 
         return ResponseEntity.ok(movieReviewResDto);
     }

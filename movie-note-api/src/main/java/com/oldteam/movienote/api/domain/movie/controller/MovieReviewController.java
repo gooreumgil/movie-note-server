@@ -46,7 +46,10 @@ public class MovieReviewController {
                         HttpExceptionCode.NOT_FOUND,
                         "존재하지 않는 movieReview 입니다. movieReviewId -> " + id));
 
-        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview, tokenMapper.getId());
+        MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
+        if (tokenMapper != null) {
+            movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+        }
         return ResponseEntity.ok(movieReviewResDto);
 
     }
@@ -61,7 +64,12 @@ public class MovieReviewController {
         movieReviewSearchCondition.setQuery(query);
 
         Page<MovieReview> movieReviewPage = movieReviewService.findAllByCondition(movieReviewSearchCondition, pageable);
-        List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage, tokenMapper.getId()).toList();
+        List<MovieReviewResDto> movieReviewResDtos = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
+        if (tokenMapper != null) {
+            for (MovieReviewResDto movieReviewResDto : movieReviewResDtos) {
+                movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+            }
+        }
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtos));
 
