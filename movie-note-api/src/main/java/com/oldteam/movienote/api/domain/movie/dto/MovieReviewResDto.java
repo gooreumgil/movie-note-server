@@ -27,6 +27,7 @@ public class MovieReviewResDto {
 
     private MemberResDto member;
     private Boolean liked;
+    private Long likeId;
 
     public MovieReviewResDto(MovieReview movieReview) {
         this.id = movieReview.getId();

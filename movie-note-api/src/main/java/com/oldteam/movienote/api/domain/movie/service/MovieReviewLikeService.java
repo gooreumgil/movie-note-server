@@ -17,8 +17,17 @@ public class MovieReviewLikeService {
 
     private final MovieReviewLikeRepository movieReviewLikeRepository;
 
+    public Long findIdByMovieReviewIdAndMemberId(Long movieReviewId, Long memberId) {
+        return movieReviewLikeRepository.findIdByMovieReviewIdAndMemberId(movieReviewId, memberId);
+    }
+
     public boolean exitsByMovieReviewIdAndMemberId(Long movieReviewId, Long memberId) {
         return movieReviewLikeRepository.existsByMovieReviewIdAndMemberId(movieReviewId, memberId);
+    }
+
+    @Transactional
+    public void delete(Long id, Long movieReviewId, Long memberId) {
+        movieReviewLikeRepository.deleteByIdAndMovieReviewIdAndMemberId(id, movieReviewId, memberId);
     }
 
 }

@@ -5,6 +5,7 @@ import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchConditi
 import com.oldteam.movienote.api.domain.movie.dto.*;
 import com.oldteam.movienote.api.domain.movie.helper.MovieReviewHelper;
 import com.oldteam.movienote.api.domain.movie.helper.MovieReviewReplyHelper;
+import com.oldteam.movienote.api.domain.movie.service.MovieReviewLikeService;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewReplyService;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.common.exception.HttpException;
@@ -35,6 +36,7 @@ public class MovieReviewController {
 
     private final MovieReviewService movieReviewService;
     private final MovieReviewReplyService movieReviewReplyService;
+    private final MovieReviewLikeService movieReviewLikeService;
     private final MovieReviewHelper movieReviewHelper;
     private final MovieReviewReplyHelper movieReviewReplyHelper;
 
@@ -79,6 +81,12 @@ public class MovieReviewController {
     public ResponseEntity<MovieReviewLikeResDto> addLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         MovieReviewLike movieReviewLike = movieReviewService.addLike(id, tokenMapper.getId());
         return ResponseEntity.ok(new MovieReviewLikeResDto(movieReviewLike));
+    }
+
+    @DeleteMapping("/{id}/likes/{likeId}")
+    public ResponseEntity<?> deleteLike(@PathVariable Long id, @PathVariable Long likeId, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        movieReviewLikeService.delete(likeId, id, tokenMapper.getId());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/replies")

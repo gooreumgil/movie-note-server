@@ -49,7 +49,13 @@ public class MovieReviewHelper {
     }
 
     public void setMovieReviewLiked(MovieReviewResDto movieReviewResDto, Long sessionMemberId) {
-        movieReviewResDto.setLiked(movieReviewLikeService.exitsByMovieReviewIdAndMemberId(movieReviewResDto.getId(), sessionMemberId));
+        Long movieReviewLikeId = movieReviewLikeService.findIdByMovieReviewIdAndMemberId(movieReviewResDto.getId(), sessionMemberId);
+        if (movieReviewLikeId != null) {
+            movieReviewResDto.setLiked(true);
+            movieReviewResDto.setLikeId(movieReviewLikeId);
+        } else {
+            movieReviewResDto.setLiked(false);
+        }
     }
 
     public Page<MovieReviewResDto> convertPageToMovieReviewResDto(Page<MovieReview> movieReviewPage) {
