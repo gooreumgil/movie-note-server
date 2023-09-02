@@ -1,0 +1,14 @@
+---
+server:
+  port: 8080
+spring:
+  config:
+    activate:
+      on-profile: port-1
+---
+server:
+  port: 8081
+spring:
+  config:
+    activate:
+      on-profile: port-2

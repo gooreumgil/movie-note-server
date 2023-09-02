@@ -35,6 +35,8 @@ public class MovieNoteApiSecurityConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers(
+                                        "/profile",
+                                        "/hello",
                                         "/api/v1/auth/login",
                                         "/api/v1/auth/sign-up",
                                         "/api/v1/movie-reviews",
