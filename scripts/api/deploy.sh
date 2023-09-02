@@ -74,7 +74,7 @@ done
 
 echo "> 전환할 Port: $WILL_RUNNING_PORT"
 echo "> Port 전환"
-echo "set \$service_url http://127.0.0.1:$WILL_RUNNING_PORT;" |sudo tee /etc/nginx/conf.d/movie-note-api-service-url.inc
+echo "set \$service_url http://127.0.0.1:$WILL_RUNNING_PORT;" |sudo tee /etc/nginx/conf.d/service-url.inc
 
 sudo service nginx reload
 
