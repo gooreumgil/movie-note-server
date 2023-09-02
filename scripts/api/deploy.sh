@@ -1,5 +1,8 @@
 #!/bin/bash
 
+cd ../../
+./gradlew :movie-note-api:bootJar
+
 echo "> spring.profiles.active = $MOVIE_NOTE_API_ENV"
 
 if [ -z "$MOVIE_NOTE_API_ENV" ]; then
@@ -35,7 +38,7 @@ fi
 echo "> 현재 구동중인 Port $CURRENT_RUNNING_PORT"
 echo "> 구동 시 Port $WILL_RUNNING_PORT"
 
-JAR="/projects/movie-note-server/movie-note-api/build/libs/movie-note-api-0.0.1-SNAPSHOT.jar"
+JAR="./movie-note-api/build/libs/movie-note-api-0.0.1-SNAPSHOT.jar"
 
 fuser -k $WILL_RUNNING_PORT/tcp
 echo "> 구동 할 port profile $WILL_RUNNING_PORT_PROFILE"
