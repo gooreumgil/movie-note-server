@@ -34,13 +34,23 @@ class MovieReviewQuerydslRepositoryImpl extends Querydsl5RepositorySupport imple
                 .innerJoin(movieReview.member, member).fetchJoin()
                 .leftJoin(member.uploadFile).fetchJoin()
                 .where(
-                        containsQuery(searchCondition.getQuery())
+                        containsQuery(searchCondition.getQuery()),
+                        isLike(searchCondition.getIsLike(), searchCondition.getMemberId())
                 )
         );
     }
 
     private BooleanExpression containsQuery(String query) {
         return StringUtils.isNotEmpty(query) ? movieReview.title.contains(query).or(movieReview.content.contains(query)) : null;
+    }
+
+    private BooleanExpression isLike(Boolean isLike, Long memberId) {
+        if (!isLike || memberId == null) {
+            return null;
+        }
+
+        return movieReview.likeList.any().movieReview.member.id.eq(memberId);
+
     }
 
 

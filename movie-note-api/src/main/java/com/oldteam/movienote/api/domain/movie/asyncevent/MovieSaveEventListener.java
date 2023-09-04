@@ -2,6 +2,7 @@ package com.oldteam.movienote.api.domain.movie.asyncevent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -10,4 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MovieSaveEventListener {
+
+    @EventListener
+    public void handleMovieSaveEvent(MovieSaveEvent movieSaveEvent) {
+
+
+    }
+
 }

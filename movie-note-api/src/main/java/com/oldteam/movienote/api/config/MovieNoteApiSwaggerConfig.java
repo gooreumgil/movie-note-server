@@ -2,10 +2,17 @@ package com.oldteam.movienote.api.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import org.springdoc.core.customizers.OpenApiBuilderCustomizer;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -14,9 +21,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.method.HandlerMethod;
 
+import java.util.List;
+
 @Configuration
+@SecurityScheme(
+        type = SecuritySchemeType.APIKEY, in = SecuritySchemeIn.HEADER,
+        name = "Authorization", description = "Auth Token"
+)
 @OpenAPIDefinition(servers = {@Server(url = "/", description = "Default Server Url")})
 public class MovieNoteApiSwaggerConfig {
+
+    private static final String AUTH_TOKEN_HEADER = "Authorization";
 
     @Bean
     public GroupedOpenApi movieNotApi() {
@@ -32,15 +47,21 @@ public class MovieNoteApiSwaggerConfig {
     @Bean
     public OperationCustomizer operationCustomizer() {
         return (Operation operation, HandlerMethod handlerMethod) -> {
-            Parameter param = new Parameter()
-                    .in(ParameterIn.HEADER.toString())  // 전역 헤더 설정
-                    .schema(new StringSchema()._default("Bearer ")) // default값 설정
-                    .name("Authorization")
-                    .description("accessToken")
-                    .required(null);
-            operation.addParametersItem(param);
+            operation.security(List.of(new SecurityRequirement().addList(AUTH_TOKEN_HEADER)));
             return operation;
         };
     }
+
+//    @Bean
+//    public OpenAPI customOpenApi() {
+//        OpenAPI openAPI = new OpenAPI();
+//        Components components = new Components();
+//        SecurityScheme securityScheme = new SecurityScheme();
+//        securityScheme.scheme("Bearer");
+//        securityScheme.bearerFormat("JWT");
+//        components.addSecuritySchemes("bearer-key", securityScheme);
+//        return openAPI;
+//    }
+
 
 }

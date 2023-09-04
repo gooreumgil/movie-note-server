@@ -6,4 +6,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class MovieSaveEvent {
+
+    private String name;
+    private String code;
+
 }

@@ -2,6 +2,7 @@ package com.oldteam.movienote.api.domain.member.session;
 
 import com.oldteam.movienote.api.domain.member.MemberService;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
+import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewSaveReqDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewUpdateReqDto;
@@ -33,10 +34,16 @@ public class SessionMemberController {
 
     @GetMapping("/movie-reviews")
     public ResponseEntity<PageDto.ListResponse<MovieReviewResDto>> findAllMovieReviews(
+            @RequestParam(required = false) Boolean isLike,
             @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
 
-        Page<MovieReview> movieReviewPage = movieReviewService.findAllByMemberId(tokenMapper.getId(), pageable);
+        MovieReviewSearchCondition movieReviewSearchCondition = new MovieReviewSearchCondition();
+        movieReviewSearchCondition.setIsLike(isLike);
+        movieReviewSearchCondition.setMemberId(tokenMapper.getId());
+
+        Page<MovieReview> movieReviewPage = movieReviewService.findAllByCondition(movieReviewSearchCondition, pageable);
+
         List<MovieReviewResDto> movieReviewResDtoList = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
         for (MovieReviewResDto movieReviewResDto : movieReviewResDtoList) {
             movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());

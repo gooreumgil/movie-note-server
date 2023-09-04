@@ -26,7 +26,7 @@ public class MovieReviewResDto {
     private LocalDateTime updatedDateTime;
 
     private MemberResDto member;
-    private Boolean liked;
+    private Boolean isLike;
     private Long likeId;
 
     public MovieReviewResDto(MovieReview movieReview) {

@@ -12,5 +12,7 @@ import lombok.Setter;
 public class MovieReviewSearchCondition {
 
     private String query;
+    private Long memberId;
+    private Boolean isLike;
 
 }

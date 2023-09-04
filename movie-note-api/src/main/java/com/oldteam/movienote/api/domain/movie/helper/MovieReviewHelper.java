@@ -51,10 +51,10 @@ public class MovieReviewHelper {
     public void setMovieReviewLiked(MovieReviewResDto movieReviewResDto, Long sessionMemberId) {
         Long movieReviewLikeId = movieReviewLikeService.findIdByMovieReviewIdAndMemberId(movieReviewResDto.getId(), sessionMemberId);
         if (movieReviewLikeId != null) {
-            movieReviewResDto.setLiked(true);
+            movieReviewResDto.setIsLike(true);
             movieReviewResDto.setLikeId(movieReviewLikeId);
         } else {
-            movieReviewResDto.setLiked(false);
+            movieReviewResDto.setIsLike(false);
         }
     }
 
