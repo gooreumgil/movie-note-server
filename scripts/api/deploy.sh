@@ -42,7 +42,7 @@ JAR="./movie-note-api/build/libs/movie-note-api-0.0.1-SNAPSHOT.jar"
 
 fuser -k $WILL_RUNNING_PORT/tcp
 echo "> 구동 할 port profile $WILL_RUNNING_PORT_PROFILE"
-nohup java -jar --spring.profiles.active=$MOVIE_NOTE_API_ENV,$WILL_RUNNING_PORT_PROFILE $JAR &
+nohup java -jar $JAR --spring.profiles.active=$MOVIE_NOTE_API_ENV,$WILL_RUNNING_PORT_PROFILE  &
 
 echo "> Health check 시작합니다."
 echo "> curl -s http://localhost:$WILL_RUNNING_PORT/hello"
