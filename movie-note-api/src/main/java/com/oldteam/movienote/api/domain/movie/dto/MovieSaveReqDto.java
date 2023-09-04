@@ -11,7 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MovieSaveReqDto {
 
+    private String name;
+    private String nameEn;
     private String code;
-    private String imageUrl;
 
 }

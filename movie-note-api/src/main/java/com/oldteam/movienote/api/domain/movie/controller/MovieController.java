@@ -1,9 +1,13 @@
 package com.oldteam.movienote.api.domain.movie.controller;
 
+import com.oldteam.movienote.api.domain.movie.asyncevent.MovieSaveEvent;
+import com.oldteam.movienote.api.domain.movie.asyncevent.MovieSaveEventListener;
 import com.oldteam.movienote.api.domain.movie.service.MovieService;
 import com.oldteam.movienote.api.domain.movie.dto.MovieResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieSaveReqDto;
 import com.oldteam.movienote.clients.kobis.dto.KobisMovieReqDto;
+import com.oldteam.movienote.clients.kobis.dto.MovieList;
+import com.oldteam.movienote.clients.kobis.dto.MovieListResult;
 import com.oldteam.movienote.clients.kobis.dto.MovieListResultWrapper;
 import com.oldteam.movienote.clients.kobis.provider.KobisProvider;
 import com.oldteam.movienote.common.exception.HttpException;
@@ -18,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Slf4j
@@ -28,11 +33,12 @@ public class MovieController {
 
     private final MovieService movieService;
     private final KobisProvider kobisProvider;
+    private final MovieSaveEventListener movieSaveEventListener;
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieResDto> findById(@PathVariable Long id) {
         Movie movie = movieService.findById(id).orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movie 입니다. movieId -> " + id));
-        MovieResDto movieResDto = new MovieResDto(movie.getId(), movie.getCode(), movie.getImageUrl());
+        MovieResDto movieResDto = new MovieResDto(movie);
         return ResponseEntity.ok(movieResDto);
     }
 
@@ -43,6 +49,10 @@ public class MovieController {
 
         try {
             movies = kobisProvider.getMovies(query);
+            MovieListResult movieListResult = movies.getMovieListResult();
+            if (movieListResult != null && !movieListResult.getMovieList().isEmpty()) {
+                movieSaveEventListener.handleMovieSaveEvent(movieListResult.getMovieList());
+            }
         } catch (ExecutionException | InterruptedException e) {
             throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EXTERNAL_EXCEPTION, e.getMessage());
         }
@@ -50,13 +60,5 @@ public class MovieController {
         return ResponseEntity.ok(movies);
 
     }
-
-    @PostMapping
-    public ResponseEntity<MovieResDto> save(@RequestBody MovieSaveReqDto dto) {
-        Movie movie = movieService.save(dto);
-        MovieResDto movieResDto = new MovieResDto(movie.getId(), movie.getCode(), movie.getImageUrl());
-        return ResponseEntity.ok(movieResDto);
-    }
-
 
 }

@@ -19,17 +19,19 @@ public class Movie extends AuditingDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+    private String nameEn;
     private String code;
-    private String imageUrl;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<MovieReview> movieReviewList = new ArrayList<>();
 
 
-    public static Movie create(String code, String imageUrl) {
+    public static Movie create(String name, String nameEn, String code) {
         Movie movie = new Movie();
+        movie.name = name;
+        movie.nameEn = nameEn;
         movie.code = code;
-        movie.imageUrl = imageUrl;
         return movie;
     }
 

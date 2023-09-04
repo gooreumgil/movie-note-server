@@ -33,12 +33,15 @@ public class MovieService {
 
     @Transactional
     public Movie save(MovieSaveReqDto dto) {
+        String name = dto.getName();
         String code = dto.getCode();
-        String imageUrl = dto.getImageUrl();
 
-        Movie movie = Movie.create(code, imageUrl);
+        if (existsByNameAndCode(name, code)) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.ALREADY_EXIST, "이미 존재하는 movie 입니다. name = " + name + ", code = " + code);
+        }
+
+        Movie movie = Movie.create(name, dto.getNameEn(), code);
         return movieRepository.save(movie);
-
     }
 
     @Transactional(readOnly = true)
@@ -70,6 +73,14 @@ public class MovieService {
         optionalMovie.ifPresent(movie -> movie.addMovieReview(movieReview));
         member.addMovieReview(movieReview);
 
+    }
+
+    public Boolean existsByName(String name) {
+        return movieRepository.existsByName(name);
+    }
+
+    public Boolean existsByNameAndCode(String name, String code) {
+        return movieRepository.existsByNameAndCode(name, code);
     }
 
 }
