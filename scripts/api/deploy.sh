@@ -72,7 +72,7 @@ do
     exit 1
   fi
 
-  echo "> Health check 연결 실패. 재시도..."
+  echo "> Health check 연결 실패. 재시도......"
   sleep 1
 done
 
