@@ -82,4 +82,8 @@ public class Member extends AuditingDomain {
         this.replyList.add(movieReviewReply);
         movieReviewReply.setMember(this);
     }
+
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }

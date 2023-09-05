@@ -1,6 +1,7 @@
 package com.oldteam.movienote.api.domain.member.session;
 
 import com.oldteam.movienote.api.domain.member.MemberService;
+import com.oldteam.movienote.api.domain.member.dto.SessionMemberUpdatePasswordReqDto;
 import com.oldteam.movienote.api.domain.member.mapper.MemberTokenMapper;
 import com.oldteam.movienote.api.domain.movie.condition.MovieReviewSearchCondition;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
@@ -31,6 +32,13 @@ public class SessionMemberController {
 
     private final MovieReviewService movieReviewService;
     private final MovieReviewHelper movieReviewHelper;
+    private final MemberService memberService;
+
+    @PatchMapping("/password")
+    public ResponseEntity<Void> updatePassword(@RequestBody SessionMemberUpdatePasswordReqDto dto, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
+        memberService.updatePassword(tokenMapper.getId(), dto.getPassword(), dto.getNewPassword());
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/movie-reviews")
     public ResponseEntity<PageDto.ListResponse<MovieReviewResDto>> findAllMovieReviews(

@@ -90,4 +90,17 @@ public class MemberService {
                 .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. email -> " + email));
     }
 
+    @Transactional
+    public void updatePassword(Long memberId, String password, String newPassword) {
+
+        Member member = findById(memberId)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. id -> " + memberId));
+
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.PASSWORD_NOT_MATCHED, "패스워드가 일치하지 않습니다.");
+        }
+
+        member.updatePassword(passwordEncoder.encode(newPassword));
+
+    }
 }
