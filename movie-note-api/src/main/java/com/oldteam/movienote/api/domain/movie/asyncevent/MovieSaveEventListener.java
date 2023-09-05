@@ -34,7 +34,7 @@ public class MovieSaveEventListener {
             try {
                 movieService.save(new MovieSaveReqDto(movieNm, movieNmEn, movieCd));
             } catch (HttpException e) {
-                log.error("MovieSaveEventListener -> handleMovieSaveEvent, errorMessage={}", e.getMessage());
+                log.warn("MovieSaveEventListener -> handleMovieSaveEvent, errorMessage={}", e.getMessage());
             }
 
         }

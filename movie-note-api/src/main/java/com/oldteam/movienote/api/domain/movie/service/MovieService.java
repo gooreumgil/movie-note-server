@@ -49,6 +49,10 @@ public class MovieService {
         return movieRepository.findById(id);
     }
 
+    public Long findIdByNameAndCode(String name, String code) {
+        return movieRepository.findIdByNameAndCode(name, code);
+    }
+
     @Transactional
     public void addMovieReview(Long id, Long memberId, MovieReviewSaveReqDto dto) {
 

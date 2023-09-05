@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieList {
 
+    private Long id;
     private String movieCd;
     private String movieNm;
     private String movieNmEn;

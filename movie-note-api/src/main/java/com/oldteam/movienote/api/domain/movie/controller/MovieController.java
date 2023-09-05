@@ -51,7 +51,14 @@ public class MovieController {
             movies = kobisProvider.getMovies(query);
             MovieListResult movieListResult = movies.getMovieListResult();
             if (movieListResult != null && !movieListResult.getMovieList().isEmpty()) {
-                movieSaveEventListener.handleMovieSaveEvent(movieListResult.getMovieList());
+                List<MovieList> movieList = movieListResult.getMovieList();
+                for (MovieList movie : movieList) {
+                    Long movieId = movieService.findIdByNameAndCode(movie.getMovieNm(), movie.getMovieCd());
+                    if (movieId != null) {
+                        movie.setId(movieId);
+                    }
+                }
+                movieSaveEventListener.handleMovieSaveEvent(movieList);
             }
         } catch (ExecutionException | InterruptedException e) {
             throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EXTERNAL_EXCEPTION, e.getMessage());
