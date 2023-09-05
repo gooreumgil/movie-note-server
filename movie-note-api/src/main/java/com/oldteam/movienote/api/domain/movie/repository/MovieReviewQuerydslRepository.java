@@ -45,7 +45,7 @@ class MovieReviewQuerydslRepositoryImpl extends Querydsl5RepositorySupport imple
     }
 
     private BooleanExpression isLike(Boolean isLike, Long memberId) {
-        if (!isLike || memberId == null) {
+        if (isLike == null || !isLike || memberId == null) {
             return null;
         }
 
