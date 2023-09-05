@@ -45,6 +45,7 @@ echo "> 구동 시 Port $WILL_RUNNING_PORT"
 fuser -k $WILL_RUNNING_PORT/tcp
 echo "> 구동 할 port profile $WILL_RUNNING_PORT_PROFILE"
 
+chmod +x ./gradlew
 ./gradlew :movie-note-api:bootJar
 
 nohup java -jar $JAR --spring.profiles.active=$MOVIE_NOTE_API_ENV,$WILL_RUNNING_PORT_PROFILE  &
