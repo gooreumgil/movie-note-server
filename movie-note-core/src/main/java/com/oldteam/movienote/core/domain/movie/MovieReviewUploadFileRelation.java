@@ -1,5 +1,6 @@
 package com.oldteam.movienote.core.domain.movie;
 
+import com.oldteam.movienote.core.audit.AuditingDomain;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovieReviewUploadFileRelation {
+public class MovieReviewUploadFileRelation extends AuditingDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -49,16 +49,15 @@ public class AuthController {
 
     @GetMapping("/verification")
     public ResponseEntity<AuthTokenResDto> verify(HttpServletRequest request) {
-
         String authorization = request.getHeader(AUTHORIZATION);
         if (!StringUtils.hasText(authorization) || !authorization.contains(TOKEN_PREFIX_CONTAINS_SPACE)) {
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_VALID_TOKEN, "유효하지 않은 토큰입니다.");
         }
 
         String accessToken = authorization.substring(TOKEN_PREFIX_CONTAINS_SPACE.length());
         Claims claims = jwtUtil.getClaims(accessToken);
         if (claims == null) {
-            throw new RuntimeException("유효하지 않은 토큰입니다.");
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_VALID_TOKEN, "유효하지 않은 토큰입니다.");
         }
 
         MemberTokenMapper memberTokenMapper = new MemberTokenMapper(claims);
@@ -83,7 +82,7 @@ public class AuthController {
                 String newAccessToken = jwtUtil.createToken(member);
                 return ResponseEntity.ok(AuthTokenResDto.of(member, decryptedEmail, newAccessToken));
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.UNKNOWN, e.getMessage());
             }
         }
 

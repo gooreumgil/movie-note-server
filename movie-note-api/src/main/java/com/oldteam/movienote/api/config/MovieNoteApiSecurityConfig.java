@@ -57,6 +57,7 @@ public class MovieNoteApiSecurityConfig {
 
         http
                 .authenticationManager(authenticationManager(authenticationConfiguration))
+                .addFilter(corsFilter())
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtUtil))
                 .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
