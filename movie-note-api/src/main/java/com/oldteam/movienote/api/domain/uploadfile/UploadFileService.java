@@ -44,4 +44,15 @@ public class UploadFileService {
 
     }
 
+    @Transactional
+    public void deleteByIdIn(List<Long> uploadFileIds) {
+
+        List<UploadFile> uploadFileList = findByIds(uploadFileIds);
+
+        for (UploadFile uploadFile : uploadFileList) {
+            awsS3Service.deleteFile(uploadFile.getS3Key());
+        }
+
+        uploadFileRepository.deleteByIdIn(uploadFileIds);
+    }
 }
