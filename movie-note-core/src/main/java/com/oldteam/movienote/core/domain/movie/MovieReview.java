@@ -33,7 +33,7 @@ public class MovieReview extends AuditingDomain implements Serializable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieReviewUploadFileRelation> fileList = new ArrayList<>();
 
     @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL)
