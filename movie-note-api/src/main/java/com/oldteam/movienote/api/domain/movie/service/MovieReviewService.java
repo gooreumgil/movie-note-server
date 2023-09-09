@@ -114,6 +114,8 @@ public class MovieReviewService {
                 movieReview.addFile(movieReviewUploadFileRelation);
             }
 
+            movieReviewRepository.save(movieReview);
+
         }
 
         return movieReview;
