@@ -50,7 +50,7 @@ public class AwsS3Service {
     }
 
     public void deleteFile(String key) {
-        s3Client.deleteObject(new DeleteObjectRequest(BUCKET_NAME, key));
+        s3Client.deleteObject(new DeleteObjectRequest(BUCKET_NAME + DELIMITER, key));
     }
 
 

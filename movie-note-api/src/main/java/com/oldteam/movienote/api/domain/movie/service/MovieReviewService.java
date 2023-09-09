@@ -106,7 +106,6 @@ public class MovieReviewService {
             }
 
             movieReview.clearUploadFiles();
-            uploadFileService.deleteByIdIn(uploadFileIds);
 
             List<UploadFile> uploadFileList = uploadFileService.findByIds(uploadFileIds);
             for (UploadFile uploadFile : uploadFileList) {
