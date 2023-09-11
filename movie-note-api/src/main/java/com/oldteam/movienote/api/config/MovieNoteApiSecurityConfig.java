@@ -40,6 +40,7 @@ public class MovieNoteApiSecurityConfig {
                                         "/profile",
                                         "/hello",
                                         "/api/v1/auth/login",
+                                        "/api/v1/auth/verification",
                                         "/api/v1/auth/sign-up",
                                         "/api/v1/movie-reviews",
                                         "/api/v1/movie-reviews/{id}",
