@@ -9,3 +9,7 @@ spring:
         - db-prod
     active: local
     include: core, core-db, aws, kobis, server-port
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
