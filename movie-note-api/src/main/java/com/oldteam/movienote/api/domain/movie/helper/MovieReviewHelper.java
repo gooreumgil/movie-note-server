@@ -3,9 +3,11 @@ package com.oldteam.movienote.api.domain.movie.helper;
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewLikeService;
+import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
+import com.oldteam.movienote.core.domain.movie.MovieReviewStatistics;
 import com.oldteam.movienote.core.domain.movie.MovieReviewUploadFileRelation;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 public class MovieReviewHelper {
 
     private final MovieReviewLikeService movieReviewLikeService;
+    private final MovieReviewService movieReviewService;
 
     public MovieReviewResDto convertMovieReviewResDto(MovieReview movieReview) {
 
@@ -44,6 +47,11 @@ public class MovieReviewHelper {
             }
         }
 
+        MovieReviewStatistics statistics = movieReview.getStatistics();
+        if (statistics == null) {
+            movieReviewService.setStatistics(movieReview.getId());
+        }
+
         return movieReviewResDto;
 
     }
@@ -55,6 +63,15 @@ public class MovieReviewHelper {
             movieReviewResDto.setLikeId(movieReviewLikeId);
         } else {
             movieReviewResDto.setIsLike(false);
+        }
+    }
+
+    public void setOwn(MovieReviewResDto movieReviewResDto, Long sessionMemberId) {
+        MemberResDto member = movieReviewResDto.getMember();
+        if (member == null) {
+            movieReviewResDto.setIsOwn(false);
+        } else {
+            movieReviewResDto.setIsOwn(member.getId().equals(sessionMemberId));
         }
     }
 

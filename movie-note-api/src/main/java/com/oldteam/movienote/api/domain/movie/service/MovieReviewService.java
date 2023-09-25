@@ -33,6 +33,7 @@ public class MovieReviewService {
 
     private final MovieReviewRepository movieReviewRepository;
     private final MovieReviewQuerydslRepository movieReviewQuerydslRepository;
+    private final MovieReviewStatisticsService movieReviewStatisticsService;
     private final MovieService movieService;
     private final MemberService memberService;
     private final MovieReviewLikeService movieReviewLikeService;
@@ -185,5 +186,17 @@ public class MovieReviewService {
 
         return movieReviewReply;
 
+    }
+
+    @Transactional
+    public void setStatistics(Long id) {
+
+        MovieReview movieReview = findById(id)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
+
+
+
+//        movieReviewStatisticsService.save()
+//        movieReview.setMovieReviewStatistics();
     }
 }

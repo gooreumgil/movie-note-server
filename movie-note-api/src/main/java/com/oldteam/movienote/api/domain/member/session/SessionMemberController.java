@@ -55,6 +55,7 @@ public class SessionMemberController {
         List<MovieReviewResDto> movieReviewResDtoList = movieReviewHelper.convertPageToMovieReviewResDto(movieReviewPage).toList();
         for (MovieReviewResDto movieReviewResDto : movieReviewResDtoList) {
             movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+            movieReviewResDto.setIsOwn(true);
         }
 
         return ResponseEntity.ok(new PageDto.ListResponse<>(movieReviewPage, movieReviewResDtoList));
@@ -65,6 +66,7 @@ public class SessionMemberController {
 
         MovieReview movieReview = movieReviewService.save(dto, tokenMapper.getId());
         MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
+        movieReviewResDto.setIsOwn(true);
 
         return ResponseEntity.ok(movieReviewResDto);
     }
@@ -75,6 +77,7 @@ public class SessionMemberController {
         MovieReview movieReview = movieReviewService.update(movieReviewId, dto);
         MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
         movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+        movieReviewResDto.setIsOwn(true);
 
         return ResponseEntity.ok(movieReviewResDto);
     }

@@ -70,6 +70,7 @@ public class MovieReviewController {
         if (tokenMapper != null) {
             for (MovieReviewResDto movieReviewResDto : movieReviewResDtos) {
                 movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+                movieReviewHelper.setOwn(movieReviewResDto, tokenMapper.getId());
             }
         }
 

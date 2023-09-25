@@ -31,6 +31,7 @@ class MovieReviewQuerydslRepositoryImpl extends Querydsl5RepositorySupport imple
         return applyPagination(pageable, query -> query
                 .selectFrom(movieReview)
                 .leftJoin(movieReview.movie).fetchJoin()
+                .leftJoin(movieReview.statistics).fetchJoin()
                 .innerJoin(movieReview.member, member).fetchJoin()
                 .leftJoin(member.uploadFile).fetchJoin()
                 .where(

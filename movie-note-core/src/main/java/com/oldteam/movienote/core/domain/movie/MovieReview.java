@@ -33,6 +33,10 @@ public class MovieReview extends AuditingDomain implements Serializable {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "statistics_id")
+    private MovieReviewStatistics statistics;
+
     @OneToMany(mappedBy = "movieReview", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MovieReviewUploadFileRelation> fileList = new ArrayList<>();
 
@@ -88,5 +92,9 @@ public class MovieReview extends AuditingDomain implements Serializable {
     public void addReply(MovieReviewReply movieReviewReply) {
         this.replyList.add(movieReviewReply);
         movieReviewReply.setMovieReview(this);
+    }
+
+    public void setMovieReviewStatistics(MovieReviewStatistics movieReviewStatistics) {
+        this.statistics = movieReviewStatistics;
     }
 }

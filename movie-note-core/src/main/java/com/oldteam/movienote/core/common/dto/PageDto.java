@@ -20,6 +20,7 @@ public class PageDto {
         private int totalPages;
         private int size;
         private long totalElements;
+        private String sort;
         private Boolean last;
 
         public PageResponse(Page page) {
@@ -27,6 +28,7 @@ public class PageDto {
             this.totalPages = page.getTotalPages();
             this.size = page.getSize();
             this.totalElements = page.getTotalElements();
+            this.sort = page.getSort().toString();
             this.last = page.isLast();
         }
     }
