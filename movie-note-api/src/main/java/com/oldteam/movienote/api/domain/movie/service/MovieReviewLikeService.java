@@ -30,4 +30,8 @@ public class MovieReviewLikeService {
         movieReviewLikeRepository.deleteByIdAndMovieReviewIdAndMemberId(id, movieReviewId, memberId);
     }
 
+    public int countByMovieReviewId(Long movieReviewId) {
+        return movieReviewLikeRepository.countAllByMovieReviewId(movieReviewId);
+    }
+
 }

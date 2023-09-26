@@ -37,6 +37,7 @@ public class MovieReviewService {
     private final MovieService movieService;
     private final MemberService memberService;
     private final MovieReviewLikeService movieReviewLikeService;
+    private final MovieReviewReplyService movieReviewReplyService;
     private final UploadFileService uploadFileService;
     private final AwsS3Service awsS3Service;
 
@@ -61,9 +62,11 @@ public class MovieReviewService {
                         HttpStatus.BAD_REQUEST,
                         HttpExceptionCode.NOT_FOUND,
                         "존재하지 않는 회원입니다. memberId -> " + memberId));
+
         List<Long> uploadFileIds = dto.getUploadFileIds();
         MovieReview movieReview = MovieReview.create(dto.getTitle(), dto.getContent());
-
+        MovieReviewStatistics movieReviewStatistics = movieReviewStatisticsService.save(0, 0, 0);
+        movieReview.setMovieReviewStatistics(movieReviewStatistics);
 
         if (movieId != null) {
             movieService.findById(movieId)
@@ -166,6 +169,12 @@ public class MovieReviewService {
         movieReview.addLikeHistory(movieReviewLikeHistory);
         member.addReviewLikeHistory(movieReviewLikeHistory);
 
+        MovieReviewStatistics statistics = movieReview.getStatistics();
+        if (statistics != null) {
+            statistics.plusLikeTotal();
+            movieReviewStatisticsService.update(statistics);
+        }
+
         return movieReviewLike;
     }
 
@@ -184,6 +193,13 @@ public class MovieReviewService {
         movieReview.addReply(movieReviewReply);
         member.addReviewReply(movieReviewReply);
 
+        MovieReviewStatistics statistics = movieReview.getStatistics();
+
+        if (statistics != null) {
+            statistics.plusReplyTotal();
+            movieReviewStatisticsService.update(statistics);
+        }
+
         return movieReviewReply;
 
     }
@@ -194,9 +210,39 @@ public class MovieReviewService {
         MovieReview movieReview = findById(id)
                 .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
 
+        int replyTotal = movieReviewReplyService.countAllByMovieReviewId(movieReview.getId());
+        int likeTotal = movieReviewLikeService.countByMovieReviewId(movieReview.getId());
 
+        MovieReviewStatistics movieReviewStatistics = movieReviewStatisticsService.save(replyTotal, likeTotal, 0);
+        movieReview.setMovieReviewStatistics(movieReviewStatistics);
+    }
 
-//        movieReviewStatisticsService.save()
-//        movieReview.setMovieReviewStatistics();
+    @Transactional
+    public void minusLikeTotal(Long id) {
+
+        MovieReview movieReview = findById(id)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
+
+        MovieReviewStatistics statistics = movieReview.getStatistics();
+        if (statistics != null) {
+            statistics.minusLikeTotal();
+            movieReviewStatisticsService.update(statistics);
+        }
+
+    }
+
+    @Transactional
+    public void minusReplyTotal(Long id) {
+
+        MovieReview movieReview = findById(id)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
+
+        MovieReviewStatistics statistics = movieReview.getStatistics();
+
+        if (statistics != null) {
+            statistics.minusReplyTotal();
+            movieReviewStatisticsService.update(statistics);
+        }
+
     }
 }

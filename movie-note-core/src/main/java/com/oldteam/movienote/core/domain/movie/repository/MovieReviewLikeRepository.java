@@ -11,6 +11,8 @@ public interface MovieReviewLikeRepository extends JpaRepository<MovieReviewLike
     @Query("select movieReviewLike.id from MovieReviewLike movieReviewLike where movieReviewLike.movieReview.id = :movieReviewId and movieReviewLike.member.id = :memberId")
     Long findIdByMovieReviewIdAndMemberId(Long movieReviewId, Long memberId);
 
+    int countAllByMovieReviewId(Long movieReviewId);
+
     @Modifying
     void deleteByIdAndMovieReviewIdAndMemberId(Long id, Long movieReviewId, Long memberId);
 

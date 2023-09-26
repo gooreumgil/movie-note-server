@@ -1,5 +1,6 @@
 package com.oldteam.movienote.api.domain.movie.dto;
 
+import com.oldteam.movienote.core.domain.movie.MovieReviewStatistics;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,10 @@ public class MovieReviewStatisticsResDto {
     private Integer likeTotal;
     private Integer viewsTotal;
 
+    public MovieReviewStatisticsResDto(MovieReviewStatistics movieReviewStatistics) {
+        this.id = movieReviewStatistics.getId();
+        this.replyTotal = movieReviewStatistics.getReplyTotal();
+        this.likeTotal = movieReviewStatistics.getLikeTotal();
+        this.viewsTotal = movieReviewStatistics.getViewsTotal();
+    }
 }

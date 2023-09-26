@@ -16,13 +16,13 @@ public class MovieReviewStatisticsService {
     private final MovieReviewStatisticsRepository movieReviewStatisticsRepository;
 
     @Transactional
-    public MovieReviewStatistics save() {
-        return movieReviewStatisticsRepository.save(MovieReviewStatistics.create());
+    public MovieReviewStatistics save(int replyTotal, int likeTotal, int viewsTotal) {
+        return movieReviewStatisticsRepository.save(MovieReviewStatistics.create(replyTotal, likeTotal, viewsTotal));
     }
 
     @Transactional
-    public MovieReviewStatistics save(int replyTotal, int likeTotal, int viewsTotal) {
-        return movieReviewStatisticsRepository.save(MovieReviewStatistics.create(replyTotal, likeTotal, viewsTotal));
+    public MovieReviewStatistics update(MovieReviewStatistics movieReviewStatistics) {
+        return movieReviewStatisticsRepository.save(movieReviewStatistics);
     }
 
 }

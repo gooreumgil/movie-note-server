@@ -2,6 +2,7 @@ package com.oldteam.movienote.api.domain.movie.helper;
 
 import com.oldteam.movienote.api.domain.member.dto.MemberResDto;
 import com.oldteam.movienote.api.domain.movie.dto.MovieReviewResDto;
+import com.oldteam.movienote.api.domain.movie.dto.MovieReviewStatisticsResDto;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewLikeService;
 import com.oldteam.movienote.api.domain.movie.service.MovieReviewService;
 import com.oldteam.movienote.api.domain.uploadfile.dto.UploadFileResDto;
@@ -50,6 +51,8 @@ public class MovieReviewHelper {
         MovieReviewStatistics statistics = movieReview.getStatistics();
         if (statistics == null) {
             movieReviewService.setStatistics(movieReview.getId());
+        } else {
+            movieReviewResDto.setStatistics(new MovieReviewStatisticsResDto(statistics));
         }
 
         return movieReviewResDto;

@@ -87,6 +87,7 @@ public class MovieReviewController {
     @DeleteMapping("/{id}/likes/{likeId}")
     public ResponseEntity<?> deleteLike(@PathVariable Long id, @PathVariable Long likeId, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         movieReviewLikeService.delete(likeId, id, tokenMapper.getId());
+        movieReviewService.minusLikeTotal(id);
         return ResponseEntity.ok().build();
     }
 
@@ -112,6 +113,7 @@ public class MovieReviewController {
     @DeleteMapping("/{id}/replies/{replyId}")
     public ResponseEntity<?> saveReply(@PathVariable Long id, @PathVariable Long replyId, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         movieReviewReplyService.delete(id, replyId, tokenMapper.getId());
+        movieReviewService.minusReplyTotal(id);
         return ResponseEntity.ok().build();
     }
 

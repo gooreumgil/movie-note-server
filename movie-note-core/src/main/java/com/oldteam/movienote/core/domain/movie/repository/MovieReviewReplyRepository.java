@@ -20,4 +20,6 @@ public interface MovieReviewReplyRepository extends JpaRepository<MovieReviewRep
             countQuery = "select count (reply) from MovieReviewReply reply inner join reply.member where reply.movieReview.id = :movieReviewId")
     Page<MovieReviewReply> findAllByMovieReviewIdJoinedMember(Long movieReviewId, Pageable pageable);
 
+    int countAllByMovieReviewId(Long movieReviewId);
+
 }

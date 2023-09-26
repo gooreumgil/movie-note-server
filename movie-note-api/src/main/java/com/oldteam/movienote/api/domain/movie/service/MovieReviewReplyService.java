@@ -50,4 +50,9 @@ public class MovieReviewReplyService {
         movieReviewReplyRepository.delete(movieReviewReply);
 
     }
+
+    public int countAllByMovieReviewId(Long movieReviewId) {
+        return movieReviewReplyRepository.countAllByMovieReviewId(movieReviewId);
+    }
+
 }

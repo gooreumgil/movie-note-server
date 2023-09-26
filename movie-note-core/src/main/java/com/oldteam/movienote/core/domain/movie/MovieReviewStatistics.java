@@ -38,4 +38,20 @@ public class MovieReviewStatistics extends AuditingDomain {
         movieReviewStatistics.viewsTotal = viewsTotal;
         return movieReviewStatistics;
     }
+
+    public void plusLikeTotal() {
+        this.likeTotal++;
+    }
+
+    public void minusLikeTotal() {
+        this.likeTotal--;
+    }
+
+    public void plusReplyTotal() {
+        this.replyTotal++;
+    }
+
+    public void minusReplyTotal() {
+        this.replyTotal--;
+    }
 }
