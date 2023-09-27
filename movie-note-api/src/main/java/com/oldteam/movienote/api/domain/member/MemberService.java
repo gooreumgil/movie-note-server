@@ -53,7 +53,7 @@ public class MemberService {
 
         Optional<Member> optionalMember = memberRepository.findByEmail(encryptEmail);
         if (optionalMember.isPresent()) {
-            throw new RuntimeException("존재하는 이메일입니다.");
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.ALREADY_EXIST, "존재하는 이메일입니다.");
         }
 
         String password = saveReqDto.getPassword();
