@@ -14,6 +14,7 @@ import com.oldteam.movienote.core.common.dto.PageDto;
 import com.oldteam.movienote.core.domain.movie.MovieReview;
 import com.oldteam.movienote.core.domain.movie.MovieReviewLike;
 import com.oldteam.movienote.core.domain.movie.MovieReviewReply;
+import com.oldteam.movienote.core.domain.movie.MovieReviewStatistics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
@@ -27,6 +28,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -78,6 +80,19 @@ public class MovieReviewController {
 
     }
 
+    @GetMapping("/{id}/statistics")
+    public ResponseEntity<MovieReviewStatisticsResDto> findStatistics(@PathVariable Long id) {
+
+        Optional<MovieReviewStatistics> optionalMovieReviewStatistics = movieReviewService.findStatisticsById(id);
+
+        if (optionalMovieReviewStatistics.isPresent()) {
+            MovieReviewStatistics movieReviewStatistics = optionalMovieReviewStatistics.get();
+            return ResponseEntity.ok(new MovieReviewStatisticsResDto(movieReviewStatistics));
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
+
     @PostMapping("/{id}/likes")
     public ResponseEntity<MovieReviewLikeResDto> addLike(@PathVariable Long id, @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
         MovieReviewLike movieReviewLike = movieReviewService.addLike(id, tokenMapper.getId());
@@ -94,7 +109,7 @@ public class MovieReviewController {
     @GetMapping("/{id}/replies")
     public ResponseEntity<PageDto.ListResponse<MovieReviewReplyResDto>> findReplies(
             @PathVariable Long id,
-            @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable) {
+            @ParameterObject @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<MovieReviewReply> movieReviewReplyPage = movieReviewReplyService.findAllByMovieReviewId(id, pageable);
         List<MovieReviewReplyResDto> movieReviewReplyResDtoList = movieReviewReplyHelper.convertPageToMovieReviewReplyResDto(movieReviewReplyPage).toList();

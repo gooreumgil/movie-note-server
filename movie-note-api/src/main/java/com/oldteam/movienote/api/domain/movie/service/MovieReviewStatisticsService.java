@@ -20,9 +20,4 @@ public class MovieReviewStatisticsService {
         return movieReviewStatisticsRepository.save(MovieReviewStatistics.create(replyTotal, likeTotal, viewsTotal));
     }
 
-    @Transactional
-    public MovieReviewStatistics update(MovieReviewStatistics movieReviewStatistics) {
-        return movieReviewStatisticsRepository.save(movieReviewStatistics);
-    }
-
 }

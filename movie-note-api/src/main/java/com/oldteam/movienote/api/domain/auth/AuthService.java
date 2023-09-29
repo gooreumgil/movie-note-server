@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,9 @@ public class AuthService {
     public Member login(AuthLoginReqDto dto) {
         String email = dto.getEmail();
         String password = dto.getPassword();
-        Member member = memberService.findByEmail(email);
+        Member member = memberService.findByEmail(email)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. email -> " + email));;
+
         String memberPassword = member.getPassword();
         boolean matches = passwordEncoder.matches(password, memberPassword);
         if (!matches) {
@@ -41,6 +45,12 @@ public class AuthService {
 
     @Transactional
     public Member signUp(AuthSignUpReqDto dto) {
+
+        Optional<Member> optionalMember = memberService.findByEmail(dto.getEmail());
+        if (optionalMember.isPresent()) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.ALREADY_EXIST, "이미 가입된 회원입니다.");
+        }
+
         return memberService.save(dto);
     }
 

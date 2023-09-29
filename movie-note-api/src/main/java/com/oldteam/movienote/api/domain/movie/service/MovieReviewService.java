@@ -13,6 +13,7 @@ import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
 import com.oldteam.movienote.core.domain.movie.*;
 import com.oldteam.movienote.core.domain.movie.repository.MovieReviewRepository;
+import com.oldteam.movienote.core.domain.movie.repository.MovieReviewStatisticsRepository;
 import com.oldteam.movienote.core.domain.uploadfile.UploadFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class MovieReviewService {
     private final MovieReviewRepository movieReviewRepository;
     private final MovieReviewQuerydslRepository movieReviewQuerydslRepository;
     private final MovieReviewStatisticsService movieReviewStatisticsService;
+    private final MovieReviewStatisticsRepository movieReviewStatisticsRepository;
     private final MovieService movieService;
     private final MemberService memberService;
     private final MovieReviewLikeService movieReviewLikeService;
@@ -146,6 +148,10 @@ public class MovieReviewService {
         return movieReviewRepository.findByIdJoinedMember(id);
     }
 
+    public Optional<MovieReviewStatistics> findStatisticsById(Long id) {
+        return movieReviewRepository.findStatisticsById(id);
+    }
+
     @Transactional
     public MovieReviewLike addLike(Long id, Long memberId) {
 
@@ -172,7 +178,7 @@ public class MovieReviewService {
         MovieReviewStatistics statistics = movieReview.getStatistics();
         if (statistics != null) {
             statistics.plusLikeTotal();
-            movieReviewStatisticsService.update(statistics);
+            movieReviewStatisticsRepository.save(statistics);
         }
 
         return movieReviewLike;
@@ -197,7 +203,7 @@ public class MovieReviewService {
 
         if (statistics != null) {
             statistics.plusReplyTotal();
-            movieReviewStatisticsService.update(statistics);
+            movieReviewStatisticsRepository.save(statistics);
         }
 
         return movieReviewReply;
@@ -226,7 +232,7 @@ public class MovieReviewService {
         MovieReviewStatistics statistics = movieReview.getStatistics();
         if (statistics != null) {
             statistics.minusLikeTotal();
-            movieReviewStatisticsService.update(statistics);
+            movieReviewStatisticsRepository.save(statistics);
         }
 
     }
@@ -241,7 +247,7 @@ public class MovieReviewService {
 
         if (statistics != null) {
             statistics.minusReplyTotal();
-            movieReviewStatisticsService.update(statistics);
+            movieReviewStatisticsRepository.save(statistics);
         }
 
     }

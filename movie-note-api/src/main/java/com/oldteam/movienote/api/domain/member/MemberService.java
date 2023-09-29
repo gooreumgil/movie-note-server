@@ -76,7 +76,7 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    public Member findByEmail(String email) {
+    public Optional<Member> findByEmail(String email) {
 
         String encryptEmail;
 
@@ -86,8 +86,7 @@ public class MemberService {
             throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.EMAIL_ENCRYPT_FAIL, e);
         }
 
-        return memberRepository.findByEmail(encryptEmail)
-                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 member 입니다. email -> " + email));
+        return memberRepository.findByEmail(encryptEmail);
     }
 
     @Transactional
