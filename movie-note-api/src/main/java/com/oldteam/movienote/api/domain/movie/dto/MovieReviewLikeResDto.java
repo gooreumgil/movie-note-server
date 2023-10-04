@@ -19,7 +19,7 @@ public class MovieReviewLikeResDto {
     private LocalDateTime updatedDateTime;
 
     public MovieReviewLikeResDto(MovieReviewLike movieReviewLike) {
-        this.id = id;
+        this.id = movieReviewLike.getId();
         this.createdDateTime = movieReviewLike.getCreatedDateTime();
         this.updatedDateTime = movieReviewLike.getUpdatedDateTime();
     }
