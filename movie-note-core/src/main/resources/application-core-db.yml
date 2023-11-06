@@ -15,7 +15,7 @@ spring:
 
 spring:
   datasource:
-    url: jdbc:mysql://52.78.178.110:3306/movie-note?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&autoReconnect=true
+    url: jdbc:mysql://43.201.106.231:3306/movie-note?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&autoReconnect=true
     username: movie-note-app
     password: aormfl13@
   config:

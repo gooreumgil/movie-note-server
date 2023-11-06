@@ -47,7 +47,8 @@ public class MovieNoteApiSecurityConfig {
                                         "/api/v1/movie-reviews/{id}/replies",
                                         "/api/v1/movies",
                                         "/swagger-ui/**",
-                                        "/v3/api-docs/**"
+                                        "/v3/api-docs/**",
+                                        "/actuator/**"
                                 ).permitAll()
                                 .requestMatchers("/**").hasRole("MEMBER")
                 );
