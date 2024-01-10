@@ -16,17 +16,16 @@ fi
 
 BASE_URL=https://movie-note-api.keyworddiary.com
 
-
 CURRENT_PORT_PROFILE=$(curl -k "$BASE_URL"/profile)
 
 echo "> 현재 구동중인 Port 프로필"
 echo $CURRENT_PORT_PROFILE
 
-if [ $CURRENT_PORT_PROFILE == "port-1" ]; then
+if [ "$CURRENT_PORT_PROFILE" == "port-1" ]; then
         CURRENT_RUNNING_PORT=8080
         WILL_RUNNING_PORT=8081
         WILL_RUNNING_PORT_PROFILE="port-2"
-elif [ $CURRENT_PORT_PROFILE == "port-2" ]; then
+elif [ "$CURRENT_PORT_PROFILE" == "port-2" ]; then
         CURRENT_RUNNING_PORT=8081
         WILL_RUNNING_PORT=8080
         WILL_RUNNING_PORT_PROFILE="port-1"
