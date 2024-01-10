@@ -14,11 +14,8 @@ if [ -z "$MOVIE_NOTE_API_ENV" ]; then
         exit 1
 fi
 
-if [ "$MOVIE_NOTE_API_ENV" == "dev" ]; then
-  BASE_URL=https://dev-movie-note-api.old-team.net
-elif [ "$MOVIE_NOTE_API_ENV" == "prod" ]; then
-  BASE_URL=https://movie-note-api.old-team.net
-fi
+BASE_URL=https://movie-note-api.keyworddiary.com
+
 
 CURRENT_PORT_PROFILE=$(curl -k "$BASE_URL"/profile)
 
