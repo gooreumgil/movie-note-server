@@ -2,7 +2,7 @@
 
 cd ../../
 
-JAR="./movie-note-api/build/libs/movie-note-api-0.0.1-SNAPSHOT.jar"
+JAR="../../movie-note-api/build/libs/movie-note-api-0.0.1-SNAPSHOT.jar"
 if [ -f "$JAR" ] ; then
     rm ${JAR}
 fi
