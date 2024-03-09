@@ -126,7 +126,7 @@ public class MovieReviewController {
     }
 
     @PatchMapping("/{id}/{replies}/{replyId}")
-    public ResponseEntity<?> updateReply(
+    public ResponseEntity<Void> updateReply(
             @PathVariable Long id, @PathVariable Long replyId,
             @RequestBody MovieReviewReplyUpdateReqDto dto,
             @AuthenticationPrincipal MemberTokenMapper tokenMapper) {
