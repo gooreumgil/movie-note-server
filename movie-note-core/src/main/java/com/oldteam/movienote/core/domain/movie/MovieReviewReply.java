@@ -39,4 +39,8 @@ public class MovieReviewReply extends AuditingDomain {
     public void setMember(Member member) {
         this.member = member;
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }

@@ -1,5 +1,6 @@
 package com.oldteam.movienote.api.domain.movie.service;
 
+import com.oldteam.movienote.api.domain.movie.dto.MovieReviewReplyUpdateReqDto;
 import com.oldteam.movienote.common.exception.HttpException;
 import com.oldteam.movienote.common.exception.HttpExceptionCode;
 import com.oldteam.movienote.core.domain.member.Member;
@@ -51,8 +52,28 @@ public class MovieReviewReplyService {
 
     }
 
+    @Transactional
+    public void update(Long movieReviewId, Long id, MovieReviewReplyUpdateReqDto dto, Long memberId) {
+
+        MovieReviewReply movieReviewReply = findByIdAndMovieReviewId(id, movieReviewId)
+                .orElseThrow(() -> new HttpException(
+                        HttpStatus.BAD_REQUEST,
+                        HttpExceptionCode.NOT_FOUND,
+                        "존재하지 않는 movieReviewReply 입니다. id -> " + id + ", movieReviewId -> " + movieReviewId
+                ));
+
+        Member member = movieReviewReply.getMember();
+        if (!member.getId().equals(memberId)) {
+            throw new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_OWNED, "movieReplyReply는 작성자만 업데이트할 수 있습니다. id -> " + movieReviewId);
+        }
+
+        movieReviewReply.update(dto.getContent());
+
+    }
+
     public int countAllByMovieReviewId(Long movieReviewId) {
         return movieReviewReplyRepository.countAllByMovieReviewId(movieReviewId);
     }
+
 
 }
