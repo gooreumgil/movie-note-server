@@ -251,4 +251,18 @@ public class MovieReviewService {
         }
 
     }
+
+    @Transactional
+    public void plusViewsTotal(Long id) {
+
+        MovieReview movieReview = findById(id)
+                .orElseThrow(() -> new HttpException(HttpStatus.BAD_REQUEST, HttpExceptionCode.NOT_FOUND, "존재하지 않는 movieReview 입니다. " + id));
+
+        MovieReviewStatistics statistics = movieReview.getStatistics();
+        if (statistics != null) {
+            statistics.plusViewsTotal();
+            movieReviewStatisticsRepository.save(statistics);
+        }
+
+    }
 }

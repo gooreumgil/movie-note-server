@@ -54,4 +54,8 @@ public class MovieReviewStatistics extends AuditingDomain {
     public void minusReplyTotal() {
         this.replyTotal--;
     }
+
+    public void plusViewsTotal() {
+        this.viewsTotal++;
+    }
 }

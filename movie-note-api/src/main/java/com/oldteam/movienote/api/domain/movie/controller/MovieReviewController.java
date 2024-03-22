@@ -53,7 +53,9 @@ public class MovieReviewController {
         MovieReviewResDto movieReviewResDto = movieReviewHelper.convertMovieReviewResDto(movieReview);
         if (tokenMapper != null) {
             movieReviewHelper.setMovieReviewLiked(movieReviewResDto, tokenMapper.getId());
+            movieReviewHelper.setOwn(movieReviewResDto, tokenMapper.getId());
         }
+
         return ResponseEntity.ok(movieReviewResDto);
 
     }
@@ -91,6 +93,12 @@ public class MovieReviewController {
         } else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @PatchMapping("/{id}/statistics/views-total")
+    public ResponseEntity<?> plusReplyTotal(@PathVariable Long id) {
+        movieReviewService.plusViewsTotal(id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{id}/likes")
