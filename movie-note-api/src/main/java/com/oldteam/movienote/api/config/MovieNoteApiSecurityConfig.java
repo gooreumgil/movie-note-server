@@ -45,6 +45,8 @@ public class MovieNoteApiSecurityConfig {
                                         "/api/v1/movie-reviews",
                                         "/api/v1/movie-reviews/{id}",
                                         "/api/v1/movie-reviews/{id}/replies",
+                                        "/api/v1/movie-reviews/{id}/statistics",
+                                        "/api/v1/movie-reviews/{id}/statistics/views-total",
                                         "/api/v1/movies",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",
