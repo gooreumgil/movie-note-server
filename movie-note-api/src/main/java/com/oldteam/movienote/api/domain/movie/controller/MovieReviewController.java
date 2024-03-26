@@ -133,7 +133,7 @@ public class MovieReviewController {
         return ResponseEntity.ok(movieReviewReplyResDto);
     }
 
-    @PatchMapping("/{id}/{replies}/{replyId}")
+    @PatchMapping("/{id}/replies/{replyId}")
     public ResponseEntity<Void> updateReply(
             @PathVariable Long id, @PathVariable Long replyId,
             @RequestBody MovieReviewReplyUpdateReqDto dto,
